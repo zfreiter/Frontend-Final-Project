@@ -1,15 +1,22 @@
 import express from 'express';
 import cors from 'cors';
+import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
-import authRoutes from './routes/auth';
+import authRoutes from './routes/auth.js';
+import groupRoutes from './routes/groups.js';
+import ownedRoutes from './routes/owned.js';
 
 dotenv.config();
 const app = express();
+app.use(bodyParser.json({ limit: '30mb', extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 /* ROUTES USING express.Router */
 app.use('/auth', authRoutes);
+app.use('/group', groupRoutes);
+app.use('/own', ownedRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
@@ -20,10 +27,6 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    app.listen(PORT, () =>
-      console.log(`Server Port: http://localhost:${PORT}`)
-    );
+    app.listen(PORT, () => console.log(`Server Port: http://localhost:${PORT}`));
   })
-  .catch((error) =>
-    console.log(`${error}. Did not connect database`)
-  );
+  .catch((error) => console.log(`${error}. Did not connect database`));

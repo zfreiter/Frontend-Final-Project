@@ -25,8 +25,8 @@ const UserSchema = new mongoose.Schema({
     min: 8,
     max: 20,
   },
-  stocksowend: [{ name: String, amount: Number }],
-  stockgroups: [{ group: [{ name: String }] }],
+  stocksOwned: [{ name: String, amount: Number }],
+  stockGroups: [[{ name: String }]],
 });
 
 const User = mongoose.model('User', UserSchema);
