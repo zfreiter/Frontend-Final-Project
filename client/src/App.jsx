@@ -8,10 +8,12 @@ import Account from './scenes/Account';
 import NotFound from './scenes/NotFound';
 import Crypto from './scenes/Crypto';
 import Cryptos from './scenes/Cryptos';
+import Navbar from './scenes/Navbar'
 
 function App() {
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Login />}></Route>
         <Route path="home" element={<Home />}></Route>
