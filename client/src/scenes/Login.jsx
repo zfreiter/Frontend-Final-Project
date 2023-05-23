@@ -4,7 +4,7 @@ import CSImage from '../images/P3.jpg';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import Button from '@mui/material/Button';
-import FormControl from '@mui/material/FormControl';
+import Typography from '@mui/material/Typography';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -82,21 +82,34 @@ export default function Login() {
   };
 
   return (
-    <>
-      <Box sx={{ width: '100%', display: 'inline-flex', alignItems: 'center' }}>
+    <main>
+      <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', backgroundColor: '#0A1929' }}>
         <Box sx={{ width: '55%', borderStyle: 'none' }}>
           <ImageList
             sx={{
               width: '100%',
               height: '100vh',
               overflow: 'hidden',
-              filter: 'brightness(60%)',
+              filter: 'brightness(100%)',
               marginTop: 0,
               marginBottom: 0,
             }}
           >
-            <img src={CSImage} height="100%" />
-            <h1>Test - Text Over Image</h1>
+            <img src={CSImage} height="100%" alt="Image with neon colors and a geometric dog decoration" />
+            <Typography
+              variant="h2"
+              gutterBottom
+              sx={{
+                position: 'absolute',
+                textAlign: 'center',
+                marginTop: '40%',
+                backdropFilter: 'brightness(0.5)',
+                filter: 'drop-shadow(2px 4px 6px black)',
+                color: 'darkorange',
+              }}
+            >
+              Welcome To Your Personal Financial Advisor
+            </Typography>
           </ImageList>
         </Box>
         {isLogin ? (
@@ -115,13 +128,20 @@ export default function Login() {
                 justifyContent: 'center',
               }}
             >
-              <h2>Sign In</h2>
-              <h5>
-                Don't have an account?{' '}
-                <a href="#" onClick={SetToRegister}>
-                  Register
-                </a>
-              </h5>
+              <Typography
+              variant="h1"
+              gutterBottom
+              sx={{fontSize: 'xx-large', fontWeight: 'bold'}}
+            >
+              Sign In
+            </Typography>
+            <Typography
+              variant="h2"
+              gutterBottom
+              sx={{fontSize: 'medium', fontWeight: 'bold'}}
+            >
+              Don't Have An Account? <a href="#" onClick={SetToRegister}>Register</a> 
+            </Typography>
               <TextField
                 id="outlined-basic"
                 label="Username"
@@ -164,13 +184,23 @@ export default function Login() {
               borderRadius: '5px',
             }}
           >
-            <h2>Register</h2>
-            <h5>
+            <Typography
+              variant="h1"
+              gutterBottom
+              sx={{fontSize: 'xx-large', fontWeight: 'bold', marginTop: '20px'}}
+            >
+              Register
+            </Typography>
+            <Typography
+              variant="h2"
+              gutterBottom
+              sx={{fontSize: 'medium', fontWeight: 'bold'}}
+            >
               Already have an account?{' '}
               <a href="#" onClick={SetAsLogin}>
                 Sign In
               </a>
-            </h5>
+            </Typography>
             <TextField
               id="outlined-required-first"
               required
@@ -223,6 +253,6 @@ export default function Login() {
           </Box>
         )}
       </Box>
-    </>
+    </main>
   );
 }

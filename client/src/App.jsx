@@ -13,10 +13,11 @@ import Navbar from './scenes/Navbar';
 
 export default function App() {
   const [loggedIn, setLogin] = useState(false);
+  const [showNav, setNav] = useState(loggedIn);
 
   return (
     <BrowserRouter>
-      <Navbar />
+      {showNav && <Navbar />}
       <Routes>
         <Route path='/' element={loggedIn ? <Home /> : <Login />}></Route>
         <Route path='home' element={loggedIn ? <Home /> : <Login />}></Route>
