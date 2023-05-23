@@ -4,12 +4,28 @@ import CSImage from '../images/P3.jpg';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import Button from '@mui/material/Button';
+import FormControl from '@mui/material/FormControl';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [pass, setPass] = useState('');
   const [isLogin, setLogin] = useState(true);
 
+  const [email, setEmail] = useState('');
+  const [first, setFirst] = useState('');
+  const [last, setLast] = useState('');
+
+  const UpdateFirst = (event) => {
+    setFirst(event.target.value);
+  };
+
+  const UpdateLast = (event) => {
+    setLast(event.target.value);
+  };
+
+  const UpdateEmail = (event) => {
+    setEmail(event.target.value);
+  };
   const UpdateUsername = (event) => {
     setUsername(event.target.value);
     console.log(username);
@@ -17,6 +33,26 @@ export default function Login() {
 
   const UpdatePassword = (event) => {
     setPass(event.target.value);
+  };
+
+  const SubmitRegister = async () => {
+    let account = {
+      firstName: first,
+      lastName: last,
+      email: email,
+      password: pass,
+    };
+
+    const response = await fetch('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(account),
+    });
+
+    if (response.ok) {
+      // redirect to login
+    } else {
+      // prompt with error
+    }
   };
 
   const SubmitLogin = async () => {
@@ -27,7 +63,7 @@ export default function Login() {
 
     const response = await fetch('/auth/login', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify(credentials),
     });
 
     if (response.ok) {
@@ -39,6 +75,10 @@ export default function Login() {
 
   const SetToRegister = () => {
     setLogin(false);
+  };
+
+  const SetAsLogin = () => {
+    setLogin(true);
   };
 
   return (
@@ -113,7 +153,7 @@ export default function Login() {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              width: '25%',
+              width: '35%',
               height: 'fit-content',
               borderStyle: 'none',
               backgroundColor: 'gainsboro',
@@ -125,6 +165,61 @@ export default function Login() {
             }}
           >
             <h2>Register</h2>
+            <h5>
+              Already have an account?{' '}
+              <a href="#" onClick={SetAsLogin}>
+                Sign In
+              </a>
+            </h5>
+            <TextField
+              id="outlined-required-first"
+              required
+              label="First Name"
+              variant="outlined"
+              sx={{ width: '75%', marginBottom: '15px' }}
+              value={first}
+              onChange={UpdateFirst}
+            />
+            <TextField
+              id="outlined-required-last"
+              required
+              label="Last Name"
+              variant="outlined"
+              sx={{ width: '75%', marginBottom: '15px' }}
+              value={last}
+              onChange={UpdateLast}
+            />
+            <TextField
+              id="outlined-required-email"
+              required
+              label="Email"
+              variant="outlined"
+              sx={{ width: '75%', marginBottom: '15px' }}
+              value={email}
+              onChange={UpdateEmail}
+            />
+
+            <TextField
+              id="outlined-password-input"
+              required
+              label="Password"
+              type="password"
+              sx={{ width: '75%', marginBottom: '20px' }}
+              value={pass}
+              onChange={UpdatePassword}
+            />
+
+            <Button
+              sx={{
+                marginTop: '20px',
+                marginRight: '55%',
+                marginBottom: '20px',
+              }}
+              variant="contained"
+              onClick={SubmitRegister}
+            >
+              Register
+            </Button>
           </Box>
         )}
       </Box>
