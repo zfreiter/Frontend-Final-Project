@@ -12,7 +12,8 @@ import Cryptos from './scenes/Cryptos';
 import Navbar from './scenes/Navbar';
 
 export default function App() {
-  const [loggedIn, setLogin] = useState(true);
+  const [loggedIn, setLogin] = useState(false);
+
   return (
     <BrowserRouter>
       <Navbar />
