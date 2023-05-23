@@ -1,17 +1,22 @@
 import { useState } from 'react';
+import { createFilterOptions } from '@mui/material/Autocomplete';
+
 import { Box, Button, TextField, Typography } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import { nyse } from '../stock_information/nyseData';
 import { nasdaq } from '../stock_information/nasdaqData';
+import { combineData } from '../stock_information/combineData';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 const Search = () => {
-  const [value, setValue] = useState(nasdaq[0]);
+  const [value, setValue] = useState(combineData[0]);
   const [found, setFound] = useState();
   const [show, setShow] = useState(false);
   const apple = { date: new Date().toString(), stock: 'aapl', price: '175.19000' };
+  const combine = nasdaq.concat(nyse);
 
   console.log(value, found, show);
+
   const handleSearch = async () => {
     //setFound(apple);
 
@@ -48,12 +53,17 @@ const Search = () => {
         if (!show) {
           setShow((current) => !current);
         }
-        setValue(nasdaq[0]);
+        setValue(combineData[0]);
       } catch (error) {
         console.error('Error: ', error);
       }
     }
   };
+
+  const filterOptions = createFilterOptions({
+    matchFrom: 'any',
+    limit: 400,
+  });
 
   return (
     <Box display={'flex'} flexDirection={'column'} m={'20px 20px'} gap={1}>
@@ -62,6 +72,7 @@ const Search = () => {
           Search
         </Button>
         <Autocomplete
+          filterOptions={filterOptions}
           size='small'
           autoHighlight
           value={value}
@@ -70,7 +81,7 @@ const Search = () => {
           }}
           disablePortal
           id='stock-search-combo-box'
-          options={nasdaq}
+          options={combineData}
           sx={{ width: 300 }}
           getOptionLabel={(option) => option.label}
           renderOption={(props, option) => (
@@ -78,7 +89,7 @@ const Search = () => {
               {option.label} ({option.name})
             </Box>
           )}
-          renderInput={(params) => <TextField {...params} label='NASDAQ Stock Symbol' />}
+          renderInput={(params) => <TextField {...params} label='NASDAQ/NYSE Stock Symbol' />}
         />
       </Box>
       {found && show && (
@@ -86,8 +97,8 @@ const Search = () => {
           position={'relative'}
           width={'397.75px'}
           border={1}
-          borderRadius={2}
-          borderColor={'#555555'}
+          borderRadius={1}
+          borderColor={'#C4C4C4'}
           p={1}
         >
           <HighlightOffIcon
@@ -108,6 +119,14 @@ const Search = () => {
           <Typography fontWeight={'500'} fontSize={'12px'}>
             {found.date}
           </Typography>
+          <Box display={'flex'} mt={1}>
+            <Button variant='contained' sx={{ mr: '10px', fontSize: '10px' }}>
+              Add to Owned
+            </Button>
+            <Button variant='contained' sx={{ fontSize: '10px' }}>
+              Add to Groups
+            </Button>
+          </Box>
         </Box>
       )}
     </Box>
