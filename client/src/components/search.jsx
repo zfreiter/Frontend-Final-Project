@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
-
+import Modal from '@mui/material/Modal';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
-import { nyse } from '../stock_information/nyseData';
-import { nasdaq } from '../stock_information/nasdaqData';
 import { combineData } from '../stock_information/combineData';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
@@ -12,11 +15,14 @@ const Search = () => {
   const [value, setValue] = useState(combineData[0]);
   const [found, setFound] = useState();
   const [show, setShow] = useState(false);
-  const apple = { date: new Date().toString(), stock: 'aapl', price: '175.19000' };
-  const combine = nasdaq.concat(nyse);
+  const [openOwned, setOpenOwned] = useState(false);
+  const [openGroup, setOpenGroup] = useState(false);
+  const [owned, setOwned] = useState(0);
+  const [group, setGroup] = useState('');
 
-  console.log(value, found, show);
-
+  /**
+   * Function searches for an individual Stock
+   */
   const handleSearch = async () => {
     //setFound(apple);
 
@@ -49,7 +55,14 @@ const Search = () => {
         const result = await response.json();
         console.log('result ', result);
         var today = new Date().toString();
-        setFound((current) => ({ stock: value, price: result.price, date: today }));
+        setFound((current) => ({
+          stock: value,
+          price: result.price,
+          changePercentage: result.change_percentage,
+          changePoint: result.change_point,
+          totalVol: result.total_vol,
+          date: today,
+        }));
         if (!show) {
           setShow((current) => !current);
         }
@@ -60,10 +73,28 @@ const Search = () => {
     }
   };
 
+  /* Options for MUI Search */
   const filterOptions = createFilterOptions({
     matchFrom: 'any',
     limit: 400,
   });
+
+  /* Styles for MUI Modal */
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    borderRadius: 2,
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '1px solid #C4C4C4',
+    boxShadow: 24,
+    p: 4,
+  };
+
+  /* Testing. */
+  const groups = [{ name: 'Group 1' }, { name: 'Risky' }, { name: 'Future' }];
 
   return (
     <Box display={'flex'} flexDirection={'column'} m={'20px 20px'} gap={1}>
@@ -114,18 +145,98 @@ const Search = () => {
             onClick={() => setShow((current) => !current)}
           />
           <Typography fontWeight={'600'}>{found.stock.name}</Typography>
-          <Typography fontWeight={'500'}>{found.stock.label}</Typography>
-          <Typography fontWeight={'500'}>${found.price}</Typography>
-          <Typography fontWeight={'500'} fontSize={'12px'}>
-            {found.date}
-          </Typography>
+          <Typography>{found.stock.label}</Typography>
+          <Typography>${found.price}</Typography>
+          {found.changePercentage >= 0 ? (
+            <Typography color={'green'}>
+              {found.changePoint}({found.changePercentage}%)
+            </Typography>
+          ) : (
+            <Typography color={'red'}>
+              {' '}
+              {found.changePoint}({found.changePercentage}%)
+            </Typography>
+          )}
+          <Typography>volume {found.totalVol}</Typography>
+          <Typography fontSize={'12px'}>{found.date}</Typography>
           <Box display={'flex'} mt={1}>
-            <Button variant='contained' sx={{ mr: '10px', fontSize: '10px' }}>
+            <Button
+              variant='contained'
+              sx={{ mr: '10px', fontSize: '10px' }}
+              onClick={() => setOpenOwned(true)}
+            >
               Add to Owned
             </Button>
-            <Button variant='contained' sx={{ fontSize: '10px' }}>
+            <Modal
+              open={openOwned}
+              onClose={() => setOpenOwned(false)}
+              aria-labelledby='modal-owned-title'
+              aria-describedby='modal-owned-description'
+            >
+              <Box sx={style}>
+                <Typography id='modal-owned-title' variant='h6' component='h2' sx={{ mb: 1 }}>
+                  Amount to add
+                </Typography>
+
+                <Button id='modal-owned-button' variant='contained' sx={{ mr: 1 }}>
+                  ADD
+                </Button>
+                <TextField
+                  size='small'
+                  type='number'
+                  label='Stock amount'
+                  required
+                  width={'75px'}
+                  value={owned}
+                  onChange={(e) => setOwned(e.target.value)}
+                />
+              </Box>
+            </Modal>
+            <Button
+              variant='contained'
+              sx={{ fontSize: '10px' }}
+              onClick={() => setOpenGroup(true)}
+            >
               Add to Groups
             </Button>
+            <Modal
+              open={openGroup}
+              onClose={() => setOpenGroup(false)}
+              aria-labelledby='modal-group-title'
+              aria-describedby='modal-group-description'
+            >
+              <Box sx={style}>
+                <Typography id='modal-group-title' variant='h6' component='h2' sx={{ mb: 1 }}>
+                  Amount to add
+                </Typography>
+                <Box display={'flex'}>
+                  <Button id='modal-group-button' variant='contained' sx={{ mr: 1 }}>
+                    ADD
+                  </Button>
+                  <FormControl sx={{ minWidth: '200px' }} size='small'>
+                    <InputLabel id='group-label'>Group</InputLabel>
+                    <Select
+                      labelId='group-select-label'
+                      id='group-select'
+                      value={group}
+                      label='Group'
+                      onChange={(e) => setGroup(e.target.value)}
+                      input={<OutlinedInput label='Name' />}
+                    >
+                      <MenuItem value=''>
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value='New'>New Group</MenuItem>
+                      {groups.map((group, key) => (
+                        <MenuItem key={key} value={group.name}>
+                          {group.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Box>
+            </Modal>
           </Box>
         </Box>
       )}
