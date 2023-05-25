@@ -1,3 +1,6 @@
+import { Box } from '@mui/material';
+import Search from '../components/search';
+
 export default function Home() {
-  return <h2>Home Page - Unimplemented</h2>;
+  return <Search />;
 }
