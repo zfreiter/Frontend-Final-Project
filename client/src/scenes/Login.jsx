@@ -66,9 +66,13 @@ export default function Login() {
 
     const response = await fetch(`${host}/auth/login`, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(credentials),
     });
 
+    const data = await response.json();
+    console.log("data")
+    console.log(data)
     if (response.ok) {
       // redirect
     } else {
