@@ -44,13 +44,14 @@ export default function Login() {
       email: email,
       password: pass,
     };
-
-    const response = await fetch(`${host}/auth/register`, {
+    console.log(account);
+    const response = await fetch(`http://localhost:3001/auth/register`, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(account),
     });
 
-    if (response.ok) {
+    if (response.status === 201) {
       // redirect to login
     } else {
       // prompt with error
@@ -85,7 +86,9 @@ export default function Login() {
 
   return (
     <main>
-      <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', backgroundColor: '#0A1929' }}>
+      <Box
+        sx={{ width: '100%', display: 'flex', alignItems: 'center', backgroundColor: '#0A1929' }}
+      >
         <Box sx={{ width: '55%', borderStyle: 'none' }}>
           <ImageList
             sx={{
@@ -97,9 +100,13 @@ export default function Login() {
               marginBottom: 0,
             }}
           >
-            <img src={CSImage} height="100%" alt="Image with neon colors and a geometric dog decoration" />
+            <img
+              src={CSImage}
+              height='100%'
+              alt='Image with neon colors and a geometric dog decoration'
+            />
             <Typography
-              variant="h2"
+              variant='h2'
               gutterBottom
               sx={{
                 position: 'absolute',
@@ -117,7 +124,7 @@ export default function Login() {
         {isLogin ? (
           <Box sx={{ width: '45%', borderStyle: 'none' }}>
             <Box
-              className="container"
+              className='container'
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -131,40 +138,39 @@ export default function Login() {
               }}
             >
               <Typography
-              variant="h1"
-              gutterBottom
-              sx={{fontSize: 'xx-large', fontWeight: 'bold'}}
-            >
-              Sign In
-            </Typography>
-            <Typography
-              variant="h2"
-              gutterBottom
-              sx={{fontSize: 'medium', fontWeight: 'bold'}}
-            >
-              Don't Have An Account? <a href="#" onClick={SetToRegister}>Register</a> 
-            </Typography>
+                variant='h1'
+                gutterBottom
+                sx={{ fontSize: 'xx-large', fontWeight: 'bold' }}
+              >
+                Sign In
+              </Typography>
+              <Typography variant='h2' gutterBottom sx={{ fontSize: 'medium', fontWeight: 'bold' }}>
+                Don't Have An Account?{' '}
+                <a href='#' onClick={SetToRegister}>
+                  Register
+                </a>
+              </Typography>
               <TextField
                 required
-                id="outlined-basic"
-                label="Username"
-                variant="outlined"
+                id='outlined-basic'
+                label='Username'
+                variant='outlined'
                 sx={{ width: '75%', marginBottom: '15px' }}
                 value={username}
                 onChange={UpdateUsername}
               />
               <TextField
                 required
-                id="outlined-password-input"
-                label="Password"
-                type="password"
+                id='outlined-password-input'
+                label='Password'
+                type='password'
                 sx={{ width: '75%' }}
                 value={pass}
                 onChange={UpdatePassword}
               />
               <Button
                 sx={{ marginTop: '50px', marginRight: '60%' }}
-                variant="contained"
+                variant='contained'
                 onClick={SubmitLogin}
               >
                 Submit
@@ -173,7 +179,7 @@ export default function Login() {
           </Box>
         ) : (
           <Box
-            className="container"
+            className='container'
             sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -189,55 +195,51 @@ export default function Login() {
             }}
           >
             <Typography
-              variant="h1"
+              variant='h1'
               gutterBottom
-              sx={{fontSize: 'xx-large', fontWeight: 'bold', marginTop: '20px'}}
+              sx={{ fontSize: 'xx-large', fontWeight: 'bold', marginTop: '20px' }}
             >
               Register
             </Typography>
-            <Typography
-              variant="h2"
-              gutterBottom
-              sx={{fontSize: 'medium', fontWeight: 'bold'}}
-            >
+            <Typography variant='h2' gutterBottom sx={{ fontSize: 'medium', fontWeight: 'bold' }}>
               Already have an account?{' '}
-              <a href="#" onClick={SetAsLogin}>
+              <a href='#' onClick={SetAsLogin}>
                 Sign In
               </a>
             </Typography>
             <TextField
-              id="outlined-required-first"
+              id='outlined-required-first'
               required
-              label="First Name"
-              variant="outlined"
+              label='First Name'
+              variant='outlined'
               sx={{ width: '75%', marginBottom: '15px' }}
               value={first}
               onChange={UpdateFirst}
             />
             <TextField
-              id="outlined-required-last"
+              id='outlined-required-last'
               required
-              label="Last Name"
-              variant="outlined"
+              label='Last Name'
+              variant='outlined'
               sx={{ width: '75%', marginBottom: '15px' }}
               value={last}
               onChange={UpdateLast}
             />
             <TextField
-              id="outlined-required-email"
+              id='outlined-required-email'
               required
-              label="Email"
-              variant="outlined"
+              label='Email'
+              variant='outlined'
               sx={{ width: '75%', marginBottom: '15px' }}
               value={email}
               onChange={UpdateEmail}
             />
 
             <TextField
-              id="outlined-password-input"
+              id='outlined-password-input'
               required
-              label="Password"
-              type="password"
+              label='Password'
+              type='password'
               sx={{ width: '75%', marginBottom: '20px' }}
               value={pass}
               onChange={UpdatePassword}
@@ -249,7 +251,7 @@ export default function Login() {
                 marginRight: '55%',
                 marginBottom: '20px',
               }}
-              variant="contained"
+              variant='contained'
               onClick={SubmitRegister}
             >
               Register
