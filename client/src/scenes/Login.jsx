@@ -7,6 +7,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 export default function Login() {
+  // temp host variable
+  let host = 'http://localhost:3001';
   const [username, setUsername] = useState('');
   const [pass, setPass] = useState('');
   const [isLogin, setLogin] = useState(true);
@@ -43,7 +45,7 @@ export default function Login() {
       password: pass,
     };
 
-    const response = await fetch('/auth/register', {
+    const response = await fetch(`${host}/auth/register`, {
       method: 'POST',
       body: JSON.stringify(account),
     });
@@ -61,7 +63,7 @@ export default function Login() {
       password: pass,
     };
 
-    const response = await fetch('/auth/login', {
+    const response = await fetch(`${host}/auth/login`, {
       method: 'POST',
       body: JSON.stringify(credentials),
     });
@@ -108,7 +110,7 @@ export default function Login() {
                 color: 'darkorange',
               }}
             >
-              Welcome To Your Personal Financial Advisor
+              Welcome To Your Next Portfolio Manager
             </Typography>
           </ImageList>
         </Box>
@@ -143,6 +145,7 @@ export default function Login() {
               Don't Have An Account? <a href="#" onClick={SetToRegister}>Register</a> 
             </Typography>
               <TextField
+                required
                 id="outlined-basic"
                 label="Username"
                 variant="outlined"
@@ -151,6 +154,7 @@ export default function Login() {
                 onChange={UpdateUsername}
               />
               <TextField
+                required
                 id="outlined-password-input"
                 label="Password"
                 type="password"
