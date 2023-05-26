@@ -6,16 +6,24 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+import {Navigate} from 'react-router-dom';
+
 export default function Login() {
   // temp host variable
   let host = 'http://localhost:3001';
   const [username, setUsername] = useState('');
   const [pass, setPass] = useState('');
   const [isLogin, setLogin] = useState(true);
-
+  
   const [email, setEmail] = useState('');
   const [first, setFirst] = useState('');
   const [last, setLast] = useState('');
+  
+  // LOGIN state
+  const [userAuthorized, setAuthorization] = useState(false);
+  const [userObject, setUserObject] = useState({});
+  const [useerToken, setUserToken] = useState('');
+
 
   const UpdateFirst = (event) => {
     setFirst(event.target.value);
@@ -73,8 +81,14 @@ export default function Login() {
     const data = await response.json();
     console.log("data")
     console.log(data)
-    if (response.ok) {
-      // redirect
+
+    console.log("token");
+    console.log(data.token);
+    if (data.token !== undefined) {
+      // needs to go to redux
+      setUserToken(data.token);
+      setUserObject(data.user);
+      setAuthorization(true);
     } else {
       //prompt error
     }
@@ -90,6 +104,7 @@ export default function Login() {
 
   return (
     <main>
+      {userAuthorized ? <Navigate to="/" authorized={true} nav={true} /> :
       <Box
         sx={{ width: '100%', display: 'flex', alignItems: 'center', backgroundColor: '#0A1929' }}
       >
@@ -263,6 +278,7 @@ export default function Login() {
           </Box>
         )}
       </Box>
+}
     </main>
   );
 }
