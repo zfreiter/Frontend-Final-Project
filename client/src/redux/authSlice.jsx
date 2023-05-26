@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   token: null,
+  user: null,
   groups: [],
   owned: [],
 };
@@ -12,9 +13,11 @@ export const authSlice = createSlice({
   reducers: {
     setLogin: (state, action) => {
       state.token = action.payload.token;
+      state.user = action.payload.user;
     },
     setLogout: (state) => {
       state.token = null;
+      state.user = null;
     },
     setGroups: (state, action) => {
       state.groups = action.payload.groups;
