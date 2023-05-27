@@ -11,9 +11,20 @@ import Crypto from './scenes/Crypto';
 import Cryptos from './scenes/Cryptos';
 import Navbar from './scenes/Navbar';
 
+import {useSelector, useDispatch } from 'react-redux';
+import {setLogin, setLogout, setGroups, setOwned} from './redux/authSlice';
+
+
 export default function App() {
-  const [loggedIn, setLogin] = useState(false);
-  const [showNav, setNav] = useState(false);
+
+  const test = useSelector(setLogin);
+  //const tPayload = test.payload;
+//
+  //console.log("redux login");
+  //console.log(test);
+  //console.log(test.payload.auth.token);
+  const [loggedIn, setLoginStatus] = useState(test.payload.auth.token !== null);
+  const [showNav, setNav] = useState(test.payload.auth.token !== null);
 
   return (
     <BrowserRouter>

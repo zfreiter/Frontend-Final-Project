@@ -8,7 +8,13 @@ import Typography from '@mui/material/Typography';
 
 import {Navigate} from 'react-router-dom';
 
+import {useSelector, useDispatch } from 'react-redux';
+import {setLogin, setLogout, setGroups, setOwned} from '../redux/authSlice';
+
 export default function Login() {
+  //redux
+  const dispatch = useDispatch();
+
   // temp host variable
   let host = 'http://localhost:3001';
   const [username, setUsername] = useState('');
@@ -61,6 +67,7 @@ export default function Login() {
 
     if (response.status === 201) {
       // redirect to login
+      setLogin(true);
     } else {
       // prompt with error
     }
@@ -85,8 +92,11 @@ export default function Login() {
     console.log("token");
     console.log(data.token);
     if (data.token !== undefined) {
+      //dispatch(setLogin(data))
+      //dispatch(setLogin(data.token))
       // needs to go to redux
-      setUserToken(data.token);
+      dispatch(setLogin({token: data.token}))
+      //setUserToken(data.token);
       setUserObject(data.user);
       setAuthorization(true);
     } else {
