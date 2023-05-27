@@ -18,27 +18,27 @@ import {setLogin, setLogout, setGroups, setOwned} from './redux/authSlice';
 export default function App() {
 
   const test = useSelector(setLogin);
-  //const tPayload = test.payload;
-//
-  //console.log("redux login");
-  //console.log(test);
-  //console.log(test.payload.auth.token);
   const [loggedIn, setLoginStatus] = useState(test.payload.auth.token !== null);
   const [showNav, setNav] = useState(test.payload.auth.token !== null);
+
+  const LoginCallback = (data) => {
+    setLoginStatus(data);
+    setNav(data);
+  }
 
   return (
     <BrowserRouter>
       {showNav && <Navbar />}
       <Routes>
-        <Route path='/' element={loggedIn ? <Home /> : <Login />}></Route>
-        <Route path='home' element={loggedIn ? <Home /> : <Login />}></Route>
-        <Route path='About' element={loggedIn ? <About /> : <Login />}></Route>
-        <Route path='Stocks' element={loggedIn ? <Stocks /> : <Login />}></Route>
-        <Route path='Stock' element={loggedIn ? <Stock /> : <Login />}></Route>
-        <Route path='Account' element={loggedIn ? <Account /> : <Login />}></Route>
-        <Route path='Crypto' element={loggedIn ? <Crypto /> : <Login />}></Route>
-        <Route path='Cryptos' element={loggedIn ? <Cryptos /> : <Login />}></Route>
-        <Route path='*' element={loggedIn ? <NotFound /> : <Login />}></Route>
+        <Route path='/' element={loggedIn ? <Home /> : <Login parentCallback={LoginCallback} />}></Route>
+        <Route path='home' element={loggedIn ? <Home /> :<Login parentCallback={LoginCallback} />}></Route>
+        <Route path='About' element={loggedIn ? <About /> : <Login parentCallback={LoginCallback} />}></Route>
+        <Route path='Stocks' element={loggedIn ? <Stocks /> : <Login parentCallback={LoginCallback} />}></Route>
+        <Route path='Stock' element={loggedIn ? <Stock /> : <Login parentCallback={LoginCallback} />}></Route>
+        <Route path='Account' element={loggedIn ? <Account /> : <Login parentCallback={LoginCallback} />}></Route>
+        <Route path='Crypto' element={loggedIn ? <Crypto /> : <Login parentCallback={LoginCallback} />}></Route>
+        <Route path='Cryptos' element={loggedIn ? <Cryptos /> : <Login parentCallback={LoginCallback} />}></Route>
+        <Route path='*' element={loggedIn ? <NotFound /> : <Login parentCallback={LoginCallback} />}></Route>
       </Routes>
     </BrowserRouter>
   );

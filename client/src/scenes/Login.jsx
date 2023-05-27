@@ -11,7 +11,7 @@ import { Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setLogin, setLogout, setGroups, setOwned } from '../redux/authSlice';
 
-export default function Login() {
+export default function Login(props) {
   //redux
   const dispatch = useDispatch();
 
@@ -90,9 +90,7 @@ export default function Login() {
 
     console.log('token');
     console.log(data.token);
-    if (data.token !== undefined) {
-      //dispatch(setLogin(data))
-      //dispatch(setLogin(data.token))
+    if (data.token !== undefined && data.user !== undefined) {
       // needs to go to redux
       dispatch(
         setLogin({
@@ -100,8 +98,11 @@ export default function Login() {
           token: data.token,
         })
       );
+      console.log("props")
+      console.log(props)
+      props.parentCallback(true);
       //setUserToken(data.token);
-      setUserObject(data.user);
+      //setUserObject(data.user);
       setAuthorization(true);
     } else {
       //prompt error
@@ -119,7 +120,7 @@ export default function Login() {
   return (
     <main>
       {userAuthorized ? (
-        <Navigate to='/' authorized={true} nav={true} />
+        <Navigate to='/home' />
       ) : (
         <Box
           sx={{ width: '100%', display: 'flex', alignItems: 'center', backgroundColor: '#0A1929' }}
