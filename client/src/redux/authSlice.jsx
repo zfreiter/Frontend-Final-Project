@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   groups: [],
   owned: [],
+  stockPrices: [],
 };
 
 export const authSlice = createSlice({
@@ -24,6 +25,9 @@ export const authSlice = createSlice({
     },
     setOwned: (state, action) => {
       state.owned = action.payload.owned;
+    },
+    setStockPrices: (state, action) => {
+      state.stockPrices = action.payload.owned;
     },
   },
 });

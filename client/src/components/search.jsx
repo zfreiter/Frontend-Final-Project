@@ -97,7 +97,7 @@ const Search = () => {
   const groups = [{ name: 'Group 1' }, { name: 'Risky' }, { name: 'Future' }];
 
   return (
-    <Box display={'flex'} flexDirection={'column'} m={'20px 20px'} gap={1}>
+    <Box display={'flex'} flexDirection={'column'} m={3} gap={1}>
       <Box display={'flex'} flexWrap={'wrap'} gap={'5px'}>
         <Button variant='contained' onClick={handleSearch}>
           Search
