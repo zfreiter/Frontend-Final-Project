@@ -66,7 +66,7 @@ export default function Login(props) {
 
     if (response.status === 201) {
       // redirect to login
-      setLogin(true);
+      setIsLogin(true);
     } else {
       // prompt with error
     }
