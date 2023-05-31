@@ -4,6 +4,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box } from '@mui/material';
+
 const OwnedStocks = ({ title, data }) => {
   return (
     <Box sx={{ width: '400px', mb: 1 }}>
@@ -36,10 +37,10 @@ const OwnedStocks = ({ title, data }) => {
                 </Typography>
                 <Typography fontSize={'10px'}>Amount: {stock.amount}</Typography>
               </Box>
-              <Box>
+              {/* <Box>
                 <Typography fontSize={'10px'}>Current price</Typography>
                 <Typography fontSize={'10px'}>Change</Typography>
-              </Box>
+              </Box> */}
             </Box>
           ))}
         </AccordionDetails>
