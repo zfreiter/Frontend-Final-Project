@@ -228,11 +228,11 @@ const Search = () => {
           <Typography>{found.stock.label}</Typography>
           <Typography>${found.price}</Typography>
           {found.changePercentage >= 0 ? (
-            <Typography color={'green'}>
+            <Typography color={'green'} fontWeight={700}>
               {found.changePoint}({found.changePercentage}%)
             </Typography>
           ) : (
-            <Typography color={'red'}>
+            <Typography color={'#AB0227'} fontWeight={700}>
               {found.changePoint}({found.changePercentage}%)
             </Typography>
           )}

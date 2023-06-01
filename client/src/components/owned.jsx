@@ -28,14 +28,25 @@ const OwnedStocks = ({ title, data }) => {
               flexWrap={'wrap'}
               border={1}
               width={'100%'}
-              p={1}
               my={1}
               borderRadius={1}
               justifyContent={'space-between'}
               backgroundColor={'white'}
             >
-              <Box>
-                <Typography fontSize={'10px'} fontWeight={'bold'} m={0} p={0}>
+              <Box
+                p={1}
+                sx={{
+                  width: '100%',
+                  '&:hover': {
+                    borderRadius: 1,
+                    backgroundColor: '#f2f2f2',
+                  },
+                  '&:hover .MuiBox-root': {
+                    color: 'gray',
+                  },
+                }}
+              >
+                <Typography fontSize={'10px'} fontWeight={'bold'}>
                   Stock: {stock.name}
                 </Typography>
                 <Typography fontSize={'10px'}>Amount: {stock.amount}</Typography>

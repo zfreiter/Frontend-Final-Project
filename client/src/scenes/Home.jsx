@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Search from '../components/search';
 import SimpleAccordion from '../components/owned';
 
@@ -7,29 +7,6 @@ export default function Home() {
   const user = useSelector((state) => state.auth.user);
   const groups = useSelector((state) => state.auth.groups);
   const owned = useSelector((state) => state.auth.owned);
-  console.log('user home ', user, owned, groups);
-  const dispatch = useDispatch();
-  const ownedData = [
-    { name: 'AAPL', amount: 18.5 },
-    { name: 'AMZN', amount: 6 },
-    { name: 'GE', amount: 35 },
-  ];
-
-  const groupData = [
-    [{ name: 'AAPL' }, { name: 'AMZN' }, { name: 'GE' }],
-    [{ name: 'COST' }, { name: 'DIS' }],
-    [{ name: 'TSLA' }, { name: 'NFLX' }, { name: 'GME' }, { name: 'META' }, { name: 'BB' }],
-  ];
-
-  const getStocks = [];
-  ownedData.map((stock) => {
-    getStocks.push(stock.name);
-  });
-  groupData.map((stock) => {
-    stock.map((stock) => {
-      getStocks.push(stock.name);
-    });
-  });
 
   return (
     <Box display={'flex'} justifyContent={'space-between'}>
