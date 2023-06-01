@@ -102,7 +102,7 @@ export default function Stock() {
     if (apiOn) {
       const response = await fetch(url);
       const data = await response.json();
-      stockData = date;
+      //stockData = date;
       console.log(data);
     }
   }
@@ -127,14 +127,14 @@ export default function Stock() {
       </Box>
       <TabPanel value={value} index={0} sx={{height: 'fit-content'}}>
         <Box sx={{borderStyle: 'solid', height: '100%'}}>
-          <Box sx={{textAlign: 'center'}}>
+          <Box sx={{alignItems: 'center'}}>
             <TextField 
               id="CompanyName"
               sx={{width: '100%', marginBottom: '20px'}}
               label="Company Name"
               defaultValue={`${stockData.Name} (${stockData.Symbol})`}
               variant="standard"
-              InputProps={{readOnly:true, style:{fontSize:'xx-large'}}}
+              inputProps={{readOnly:true, style:{textAlign: 'center', fontSize: 'xx-large'}}}
               />
           </Box>
           <Box sx={{display: 'inline-flex', width: '100%', marginBottom: '20px'}}>
@@ -157,7 +157,7 @@ export default function Stock() {
               <TextField 
               id="Type"
               label="Type"
-              defaultValue={`${stockData.AssetType}`}
+              defaultValue={`${stockData.AssetType.toUpperCase()}`}
               variant="standard"
               sx={{margin: '5px', width: '33%'}}
               InputProps={{readOnly:true}}
@@ -173,7 +173,44 @@ export default function Stock() {
         </Box>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+      <Box sx={{borderStyle: 'solid', height: '100%'}}>
+          <Box sx={{alignItems: 'center'}}>
+            <TextField 
+              id="CompanyName"
+              sx={{width: '100%', marginBottom: '20px'}}
+              label="Company Name"
+              defaultValue={`${stockData.Name} (${stockData.Symbol})`}
+              variant="standard"
+              inputProps={{readOnly:true, style:{textAlign: 'center', fontSize: 'xx-large'}}}
+              />
+          </Box>
+          <Box sx={{display: 'inline-flex', width: '100%', marginBottom: '20px'}}>
+            <TextField 
+              id="Industry"
+              label="Industry"
+              defaultValue={`${stockData.Industry}`}
+              variant="standard"
+              sx={{margin: '5px', width: '33%'}}
+              InputProps={{readOnly:true}}
+              />
+               <TextField 
+              id="Sector"
+              label="Sector"
+              defaultValue={`${stockData.Sector}`}
+              variant="standard"
+              sx={{margin: '5px', width: '33%'}}
+              InputProps={{readOnly:true}}
+              />
+              <TextField 
+              id="Type"
+              label="Type"
+              defaultValue={`${stockData.AssetType.toUpperCase()}`}
+              variant="standard"
+              sx={{margin: '5px', width: '33%'}}
+              InputProps={{readOnly:true}}
+              />
+          </Box>
+        </Box>
       </TabPanel>
       <TabPanel value={value} index={2}>
         Item Three
