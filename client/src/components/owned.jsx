@@ -8,14 +8,17 @@ import { Box } from '@mui/material';
 const OwnedStocks = ({ title, data }) => {
   return (
     <Box sx={{ width: '400px', mb: 1 }}>
-      <Accordion sx={{ border: '1px solid #033922' }}>
+      <Accordion autoFocus sx={{ border: '1px solid #033922' }}>
         <AccordionSummary
+          autoFocus
           expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
           aria-controls='panel1a-content'
           id='panel1a-header'
           sx={{ backgroundColor: '#033922' }}
         >
-          <Typography sx={{ color: 'white', backgroundColor: '#033922' }}>{title}</Typography>
+          <Typography autoFocus sx={{ color: 'white', backgroundColor: '#033922' }}>
+            {title}
+          </Typography>
         </AccordionSummary>
         <AccordionDetails sx={{ border: '1px solid green' }}>
           {data.map((stock, key) => (

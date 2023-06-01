@@ -11,6 +11,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { combineData } from '../stock_information/combineData';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useSelector, useDispatch } from 'react-redux';
+import { setUser } from '../redux/authSlice';
 
 const Search = () => {
   const [stockValue, setStockValue] = useState(combineData[0]);
@@ -19,13 +20,14 @@ const Search = () => {
   const [openOwned, setOpenOwned] = useState(false);
   const [openGroup, setOpenGroup] = useState(false);
   const [owned, setOwned] = useState(0);
-  const [group, setGroup] = useState('');
+  const [selectGroup, setSelectGroup] = useState('');
 
   const [amount, setAmount] = useState(1);
   const own = useSelector((state) => state.auth.user.stocksOwned);
   const user = useSelector((state) => state.auth.user);
+  const token = useSelector((state) => state.auth.token);
   const groups = useSelector((state) => state.auth.user.stockGroups);
-
+  const dispatch = useDispatch();
   const closeOwnedModal = () => {
     setAmount(1);
     setOpenOwned(false);
@@ -35,9 +37,8 @@ const Search = () => {
     setOpenOwned(true);
   };
 
+  /* ADD STOCK WITH AMOUNT TO OWNED STOCKS TO DATABASE AND UPDATE DISPLAY */
   const addToOwned = async () => {
-    //add to db
-
     let upDatedOwned = [];
     own.map((stock) => {
       upDatedOwned.push(stock);
@@ -45,28 +46,66 @@ const Search = () => {
 
     upDatedOwned.push({ name: found.stock.label, amount: amount });
     const data = { userId: user._id, owned: upDatedOwned };
-    console.log('data ', data);
+
     const url = 'http://localhost:3001/own/owned';
     const options = {
       method: 'PATCH',
       headers: {
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     };
-    const response = await fetch(url, options);
-    const json = await response.json();
-    console.log('new user ', json);
-    //if true update state user
-    setOpenOwned(false);
+    try {
+      const response = await fetch(url, options);
+      const json = await response.json();
+      console.log('new user ', json);
+
+      dispatch(setUser({ user: json }));
+      setOwned(1);
+      setOpenOwned(false);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  useEffect(() => {
-    setGroup(groups);
-  }, []);
-  /**
-   * Function searches for an individual Stock
-   */
+  const addToGroup = async () => {
+    const stockToAdd = { name: found.stock.label };
+    if (selectGroup !== undefined) {
+      let upDatedGroups = [];
+      user.stockGroups.map((group) => {
+        upDatedGroups.push([...group]);
+      });
+
+      upDatedGroups[selectGroup].push(stockToAdd);
+
+      const data = { userId: user._id, groups: upDatedGroups };
+      const url = 'http://localhost:3001/group/groups';
+
+      const options = {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      };
+
+      try {
+        const response = await fetch(url, options);
+        const json = await response.json();
+        console.log('new user ', json);
+
+        dispatch(setUser({ user: json }));
+        setSelectGroup('');
+        setOpenGroup(false);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  /* Function searches for an individual Stock */
   const handleSearch = async () => {
     //setFound(apple);
 
@@ -137,13 +176,10 @@ const Search = () => {
     p: 4,
   };
 
-  /* Testing. */
-  console.log('user ', user);
-  console.log('own ', own);
   return (
     <Box display={'flex'} flexDirection={'column'} m={3} gap={1}>
       <Box display={'flex'} flexWrap={'wrap'} gap={'5px'}>
-        <Button variant='contained' onClick={handleSearch}>
+        <Button variant='contained' autoFocus onClick={handleSearch}>
           Search
         </Button>
         <Autocomplete
@@ -261,7 +297,12 @@ const Search = () => {
                   Amount to add
                 </Typography>
                 <Box display={'flex'}>
-                  <Button id='modal-group-button' variant='contained' sx={{ mr: 1 }}>
+                  <Button
+                    id='modal-group-button'
+                    variant='contained'
+                    sx={{ mr: 1 }}
+                    onClick={addToGroup}
+                  >
                     ADD
                   </Button>
                   <FormControl sx={{ minWidth: '200px' }} size='small'>
@@ -269,9 +310,9 @@ const Search = () => {
                     <Select
                       labelId='group-select-label'
                       id='group-select'
-                      value={group}
+                      value={selectGroup}
                       label='Group'
-                      onChange={(e) => setGroup(e.target.value)}
+                      onChange={(e) => setSelectGroup(e.target.value)}
                       input={<OutlinedInput label='Name' />}
                     >
                       <MenuItem value=''>
@@ -279,7 +320,7 @@ const Search = () => {
                       </MenuItem>
 
                       {groups.map((group, key) => (
-                        <MenuItem key={key} value={group}>
+                        <MenuItem key={key} value={key}>
                           {key + 1}
                         </MenuItem>
                       ))}

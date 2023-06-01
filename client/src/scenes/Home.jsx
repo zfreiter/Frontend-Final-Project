@@ -5,7 +5,9 @@ import SimpleAccordion from '../components/owned';
 
 export default function Home() {
   const user = useSelector((state) => state.auth.user);
-  console.log('user ', user);
+  const groups = useSelector((state) => state.auth.groups);
+  const owned = useSelector((state) => state.auth.owned);
+  console.log('user home ', user, owned, groups);
   const dispatch = useDispatch();
   const ownedData = [
     { name: 'AAPL', amount: 18.5 },
@@ -33,8 +35,8 @@ export default function Home() {
     <Box display={'flex'} justifyContent={'space-between'}>
       <Search />
       <Box display={'flex'} flexDirection={'column'} m={3}>
-        <SimpleAccordion title={'Owned Stocks'} data={user.stocksOwned} />
-        {user.stockGroups.map((group, key) => (
+        <SimpleAccordion title={'Owned Stocks'} data={user?.stocksOwned} />
+        {user?.stockGroups.map((group, key) => (
           <SimpleAccordion key={key} title={`GROUP ${key + 1}`} data={group} />
         ))}
       </Box>

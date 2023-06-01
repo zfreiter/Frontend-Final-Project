@@ -4,6 +4,6 @@ import { updateGroup } from '../controllers/stockGroups.js';
 const router = express.Router();
 
 /* PATCH */
-router.patch('/groups', updateGroup);
+router.patch('/groups', verifyToken, updateGroup);
 
 export default router;

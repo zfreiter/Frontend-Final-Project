@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
+import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
 import Login from './scenes/Login';
 import Home from './scenes/Home';
 import About from './scenes/About';
@@ -11,59 +10,23 @@ import Crypto from './scenes/Crypto';
 import Cryptos from './scenes/Cryptos';
 import Navbar from './scenes/Navbar';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { setLogin, setLogout, setGroups, setOwned } from './redux/authSlice';
+import { useSelector } from 'react-redux';
 
 export default function App() {
-  const test = useSelector(setLogin);
-  const [loggedIn, setLoginStatus] = useState(Boolean(useSelector((state) => state)));
-  const [showNav, setNav] = useState(useSelector((state) => state));
-
-  const LoginCallback = (data) => {
-    setLoginStatus(data);
-    setNav(data);
-  };
+  const loggedIn = Boolean(useSelector((state) => state.auth.token));
 
   return (
     <BrowserRouter>
-      {showNav && <Navbar />}
+      {loggedIn && <Navbar />}
       <Routes>
-        <Route
-          path='/'
-          element={loggedIn ? <Home /> : <Login parentCallback={LoginCallback} />}
-        ></Route>
-        <Route
-          path='home'
-          element={loggedIn ? <Home /> : <Login parentCallback={LoginCallback} />}
-        ></Route>
-        <Route
-          path='About'
-          element={loggedIn ? <About /> : <Login parentCallback={LoginCallback} />}
-        ></Route>
-        <Route
-          path='Stocks'
-          element={loggedIn ? <Stocks /> : <Login parentCallback={LoginCallback} />}
-        ></Route>
-        <Route
-          path='Stock'
-          element={loggedIn ? <Stock /> : <Login parentCallback={LoginCallback} />}
-        ></Route>
-        <Route
-          path='Account'
-          element={loggedIn ? <Account /> : <Login parentCallback={LoginCallback} />}
-        ></Route>
-        <Route
-          path='Crypto'
-          element={loggedIn ? <Crypto /> : <Login parentCallback={LoginCallback} />}
-        ></Route>
-        <Route
-          path='Cryptos'
-          element={loggedIn ? <Cryptos /> : <Login parentCallback={LoginCallback} />}
-        ></Route>
-        <Route
-          path='*'
-          element={loggedIn ? <NotFound /> : <Login parentCallback={LoginCallback} />}
-        ></Route>
+        <Route path='/' element={<Login />} />
+        <Route path='/home' element={loggedIn ? <Home /> : <Navigate to='/' />} />
+        <Route path='/About' element={loggedIn ? <About /> : <Navigate to='/' />} />
+        <Route path='/Stocks' element={loggedIn ? <Stocks /> : <Navigate to='/' />} />
+        <Route path='/Stock' element={loggedIn ? <Stock /> : <Navigate to='/' />} />
+        <Route path='/Account' element={loggedIn ? <Account /> : <Navigate to='/' />} />
+        <Route path='/Crypto' element={loggedIn ? <Crypto /> : <Navigate to='/' />} />
+        <Route path='/Cryptos' element={loggedIn ? <Cryptos /> : <Navigate to='/' />} />
       </Routes>
     </BrowserRouter>
   );

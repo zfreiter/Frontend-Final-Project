@@ -20,6 +20,9 @@ export const authSlice = createSlice({
       state.token = null;
       state.user = null;
     },
+    setUser: (state, action) => {
+      state.user = action.payload.user;
+    },
     setGroups: (state, action) => {
       state.groups = action.payload.groups;
     },
@@ -32,5 +35,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setLogin, setLogout, setGroups, setOwned, setStockPrices } = authSlice.actions;
+export const { setLogin, setLogout, setUser, setGroups, setOwned, setStockPrices } =
+  authSlice.actions;
 export default authSlice.reducer;
