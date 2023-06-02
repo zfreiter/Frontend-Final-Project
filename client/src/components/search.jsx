@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import Modal from '@mui/material/Modal';
 import FormControl from '@mui/material/FormControl';
@@ -10,24 +10,107 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import { combineData } from '../stock_information/combineData';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser } from '../redux/authSlice';
 
 const Search = () => {
-  const [value, setValue] = useState(combineData[0]);
+  const [stockValue, setStockValue] = useState(combineData[0]);
   const [found, setFound] = useState();
   const [show, setShow] = useState(false);
   const [openOwned, setOpenOwned] = useState(false);
   const [openGroup, setOpenGroup] = useState(false);
   const [owned, setOwned] = useState(0);
-  const [group, setGroup] = useState('');
+  const [selectGroup, setSelectGroup] = useState('');
 
-  /**
-   * Function searches for an individual Stock
-   */
+  const [amount, setAmount] = useState(1);
+  const own = useSelector((state) => state.auth.user.stocksOwned);
+  const user = useSelector((state) => state.auth.user);
+  const token = useSelector((state) => state.auth.token);
+  const groups = useSelector((state) => state.auth.user.stockGroups);
+  const dispatch = useDispatch();
+  const closeOwnedModal = () => {
+    setAmount(1);
+    setOpenOwned(false);
+  };
+
+  const openOwnedModal = () => {
+    setOpenOwned(true);
+  };
+
+  /* ADD STOCK WITH AMOUNT TO OWNED STOCKS TO DATABASE AND UPDATE DISPLAY */
+  const addToOwned = async () => {
+    let upDatedOwned = [];
+    own.map((stock) => {
+      upDatedOwned.push(stock);
+    });
+
+    upDatedOwned.push({ name: found.stock.label, amount: amount });
+    const data = { userId: user._id, owned: upDatedOwned };
+
+    const url = 'http://localhost:3001/own/owned';
+    const options = {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    };
+    try {
+      const response = await fetch(url, options);
+      const json = await response.json();
+      console.log('new user ', json);
+
+      dispatch(setUser({ user: json }));
+      setOwned(1);
+      setOpenOwned(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const addToGroup = async () => {
+    const stockToAdd = { name: found.stock.label };
+    if (selectGroup !== undefined) {
+      let upDatedGroups = [];
+      user.stockGroups.map((group) => {
+        upDatedGroups.push([...group]);
+      });
+
+      upDatedGroups[selectGroup].push(stockToAdd);
+
+      const data = { userId: user._id, groups: upDatedGroups };
+      const url = 'http://localhost:3001/group/groups';
+
+      const options = {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      };
+
+      try {
+        const response = await fetch(url, options);
+        const json = await response.json();
+        console.log('new user ', json);
+
+        dispatch(setUser({ user: json }));
+        setSelectGroup('');
+        setOpenGroup(false);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  /* Function searches for an individual Stock */
   const handleSearch = async () => {
     //setFound(apple);
 
     /* REALSTONK FOR ONE ITEM, BUT RETURNS THE WRONG INFOMATION AT TIMES */
-    const url = `https://realstonks.p.rapidapi.com/${value.label}`;
+    const url = `https://realstonks.p.rapidapi.com/${stockValue.label}`;
     const options = {
       method: 'GET',
       headers: {
@@ -49,14 +132,14 @@ const Search = () => {
     //     'X-RapidAPI-Host': 'twelve-data1.p.rapidapi.com',
     //   },
     // };
-    if (value.label !== '') {
+    if (stockValue.label !== '') {
       try {
         const response = await fetch(url, options);
         const result = await response.json();
         console.log('result ', result);
         var today = new Date().toString();
         setFound((current) => ({
-          stock: value,
+          stock: stockValue,
           price: result.price,
           changePercentage: result.change_percentage,
           changePoint: result.change_point,
@@ -66,7 +149,7 @@ const Search = () => {
         if (!show) {
           setShow((current) => !current);
         }
-        setValue(combineData[0]);
+        setStockValue(combineData[0]);
       } catch (error) {
         console.error('Error: ', error);
       }
@@ -93,22 +176,19 @@ const Search = () => {
     p: 4,
   };
 
-  /* Testing. */
-  const groups = [{ name: 'Group 1' }, { name: 'Risky' }, { name: 'Future' }];
-
   return (
-    <Box display={'flex'} flexDirection={'column'} m={'20px 20px'} gap={1}>
+    <Box display={'flex'} flexDirection={'column'} m={3} gap={1}>
       <Box display={'flex'} flexWrap={'wrap'} gap={'5px'}>
-        <Button variant='contained' onClick={handleSearch}>
+        <Button variant='contained' autoFocus onClick={handleSearch}>
           Search
         </Button>
         <Autocomplete
           filterOptions={filterOptions}
           size='small'
           autoHighlight
-          value={value}
+          value={stockValue}
           onChange={(event, newValue) => {
-            setValue(newValue);
+            setStockValue(newValue);
           }}
           disablePortal
           id='stock-search-combo-box'
@@ -148,12 +228,11 @@ const Search = () => {
           <Typography>{found.stock.label}</Typography>
           <Typography>${found.price}</Typography>
           {found.changePercentage >= 0 ? (
-            <Typography color={'green'}>
+            <Typography color={'green'} fontWeight={700}>
               {found.changePoint}({found.changePercentage}%)
             </Typography>
           ) : (
-            <Typography color={'red'}>
-              {' '}
+            <Typography color={'#AB0227'} fontWeight={700}>
               {found.changePoint}({found.changePercentage}%)
             </Typography>
           )}
@@ -162,14 +241,15 @@ const Search = () => {
           <Box display={'flex'} mt={1}>
             <Button
               variant='contained'
+              disabled={own.some((stock) => stock.name === found.stock.label)}
               sx={{ mr: '10px', fontSize: '10px' }}
-              onClick={() => setOpenOwned(true)}
+              onClick={openOwnedModal}
             >
-              Add to Owned
+              {own.some((stock) => stock.name === found.stock.label) ? 'Owned' : 'Add to Owned'}
             </Button>
             <Modal
               open={openOwned}
-              onClose={() => setOpenOwned(false)}
+              onClose={closeOwnedModal}
               aria-labelledby='modal-owned-title'
               aria-describedby='modal-owned-description'
             >
@@ -178,7 +258,12 @@ const Search = () => {
                   Amount to add
                 </Typography>
 
-                <Button id='modal-owned-button' variant='contained' sx={{ mr: 1 }}>
+                <Button
+                  id='modal-owned-button'
+                  variant='contained'
+                  sx={{ mr: 1 }}
+                  onClick={addToOwned}
+                >
                   ADD
                 </Button>
                 <TextField
@@ -187,8 +272,10 @@ const Search = () => {
                   label='Stock amount'
                   required
                   width={'75px'}
-                  value={owned}
-                  onChange={(e) => setOwned(e.target.value)}
+                  value={amount}
+                  onChange={(event) => {
+                    setAmount(event.target.value);
+                  }}
                 />
               </Box>
             </Modal>
@@ -210,7 +297,12 @@ const Search = () => {
                   Amount to add
                 </Typography>
                 <Box display={'flex'}>
-                  <Button id='modal-group-button' variant='contained' sx={{ mr: 1 }}>
+                  <Button
+                    id='modal-group-button'
+                    variant='contained'
+                    sx={{ mr: 1 }}
+                    onClick={addToGroup}
+                  >
                     ADD
                   </Button>
                   <FormControl sx={{ minWidth: '200px' }} size='small'>
@@ -218,18 +310,18 @@ const Search = () => {
                     <Select
                       labelId='group-select-label'
                       id='group-select'
-                      value={group}
+                      value={selectGroup}
                       label='Group'
-                      onChange={(e) => setGroup(e.target.value)}
+                      onChange={(e) => setSelectGroup(e.target.value)}
                       input={<OutlinedInput label='Name' />}
                     >
                       <MenuItem value=''>
                         <em>None</em>
                       </MenuItem>
-                      <MenuItem value='New'>New Group</MenuItem>
+
                       {groups.map((group, key) => (
-                        <MenuItem key={key} value={group.name}>
-                          {group.name}
+                        <MenuItem key={key} value={key}>
+                          {key + 1}
                         </MenuItem>
                       ))}
                     </Select>

@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   groups: [],
   owned: [],
+  stockPrices: [],
 };
 
 export const authSlice = createSlice({
@@ -19,14 +20,21 @@ export const authSlice = createSlice({
       state.token = null;
       state.user = null;
     },
+    setUser: (state, action) => {
+      state.user = action.payload.user;
+    },
     setGroups: (state, action) => {
       state.groups = action.payload.groups;
     },
     setOwned: (state, action) => {
       state.owned = action.payload.owned;
     },
+    setStockPrices: (state, action) => {
+      state.stockPrices = action.payload.owned;
+    },
   },
 });
 
-export const { setLogin, setLogout, setGroups, setOwned } = authSlice.actions;
+export const { setLogin, setLogout, setUser, setGroups, setOwned, setStockPrices } =
+  authSlice.actions;
 export default authSlice.reducer;
