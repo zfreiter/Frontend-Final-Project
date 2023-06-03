@@ -17,6 +17,9 @@ import PriceChangeIcon from '@mui/icons-material/PriceChange';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import BalanceIcon from '@mui/icons-material/Balance';
 
+// Components
+import StockChart from '../components/Chart';
+
 const LabelProperties = {
   style: {fontWeight: 'bolder', fontSize: 'large'}
 }
@@ -79,7 +82,9 @@ function a11yProps(index) {
 
 export default function Stock() {
 
-  const apiOn = false;
+  let overviewAPIOn = false;
+  let chartAPIOn = true;
+  const [displayRangeDays, setDisplayRangeDays] = useState(10);
   // fill stock data from overview call in alpha vantage
   const stockData = {
     '50DayMovingAverage':"126.57",
@@ -129,20 +134,21 @@ export default function Stock() {
     'Symbol':"IBM",
     'TrailingPE':"57.54",
 }
+
   // ticker needs to come from query string
   const ticker = "IBM"
-  const url = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=8RH7ENJ1V5RMOK11}`;
+  const overviewAPIURL = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=demo}`;
 
-  const GetData = async () => {
+  const GetOverviewData = async () => {
 
-    if (apiOn) {
-      const response = await fetch(url);
+    if (overviewAPIOn) {
+      const response = await fetch(overviewAPIURL);
       const data = await response.json();
       //stockData = date;
       console.log(data);
     }
   }
-  GetData();
+  GetOverviewData();
 
   const Monify = (toMonify) => {
     return new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(toMonify);
@@ -161,6 +167,7 @@ export default function Stock() {
   };
 
   return (
+    <>
     <Box sx={{ margin: '3%', borderStyle: 'solid' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
@@ -175,6 +182,7 @@ export default function Stock() {
             <TextField 
               id="CompanyName"
               sx={{width: '100%', marginBottom: '20px'}}
+              
               label="Company Name"
               defaultValue={`${stockData.Name} (${stockData.Symbol})`}
               variant="standard"
@@ -393,5 +401,9 @@ export default function Stock() {
         Item Three
       </TabPanel>
     </Box>
+    <Box sx={{margin: '3%', borderStyle: 'solid'}}>
+      {<StockChart name={stockData.Name} symbol={stockData.Symbol} range={displayRangeDays}/>}
+    </Box>
+    </>
   );
 }
