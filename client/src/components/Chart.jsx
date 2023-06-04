@@ -22,101 +22,73 @@ ChartJS.register(
 );
 
 export const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Chart.js Line Chart',
-      },
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top',
     },
-    maintainAspectRatio: true
-  };
+    title: {
+      display: true,
+      text: 'Chart.js Line Chart',
+    },
+  },
+};
+
+const labels = ["test"];
+const d1 = [20];
+const d2 = [5];
+
+export const lineData = {
+  labels,
+  datasets: [
+    {
+      label: 'Dataset 1',
+      data: d1,
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    },
+    {
+      label: 'Dataset 2',
+      data: d2,
+      borderColor: 'rgb(53, 162, 235)',
+      backgroundColor: 'rgba(53, 162, 235, 0.5)',
+    },
+  ],
+};
 
 
 export default function StockChart({name, symbol, range}) {
-    const [allData, setallData] = useState(null);
-    const [label, setLabels] = useState(null);
-    const [highs, setHighs] = useState(null);
-    const [lows, setLows] = useState(null);
-
+    const [apiResult, setAPIResult] = useState();
     const chartApiURL = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=demo`;
-    let apiOn = true;
-    const labels = [];
-    let chartDataHigh = [];
-    let chartDataLow = [];
-
-    const GetTimeSeriesData = async (labels, chartDataHigh, chartDataLow) => {
-        try {
-        const response = await fetch(chartApiURL);
-        const data = await response.json();
-        let test1 = await data['Time Series (Daily)'];
-        console.log('Timer Series data', test1);
-
-        for (const [key, value] of Object.entries(test1)) {
-            let highVal = value['2. high'];
-            let lowVal = value['3. low'];
-
-            // add label
-            labels.push(key);
-            
-            // add low
-            chartDataHigh.push(highVal);
-            
-            // add high
-            chartDataLow.push(lowVal);
-        }        
-
-        labels = labels.slice(0, range);
-        
-        chartDataHigh = chartDataHigh.slice(0, range);
-        
-        chartDataLow = chartDataLow.slice(0, range);
-
-        setHighs(chartDataHigh);
-        setLabels(labels);
-        setLows(chartDataLow);
-        setallData(test1);
-        }
-        catch (err) {
-            console.log('Error', err);
-        }
-    }
 
     useEffect(() => {
-        GetTimeSeriesData(labels, chartDataHigh, chartDataLow);
-    }, []);
+      fetch(chartApiURL)
+      .then(response => {return response.json()})
+      .then(data => {
+        setAPIResult(data);
+        let labels = [];
+        let highs = [];
+        let lows = [];
+        for (const [key, value] of Object.entries(data["Time Series (Daily)"])) {
+          let highValue = value['2. high'];
+          let lowValue = value['3. low'];
 
-        
-    console.log('Chart Data high after use efffect', chartDataHigh);
+          labels.push(key);
+          highs.push(Number(highValue));
+          lows.push(Number(lowValue));
 
+          labels = labels.slice(0, range).reverse();
+          highs = highs.slice(0, range).reverse();
+          lows = lows.slice(0, range).reverse();
+        }
 
-    let lineData = {
-        label,
-        datasets: [
-            {
-                label: 'Highs',
-                data: highs,
-                borderColor: 'rgb(0, 0, 0)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
-            },
-            {
-                label: 'Lows',
-                data: lows,
-                borderColor: 'rgb(53, 162, 235)',
-                backgroundColor: 'rgba(53, 162, 235, 0.5)',
-            },
-       ],
-    };
+        lineData.labels = labels;
+        lineData.datasets[0].data = highs;
+        lineData.datasets[1].data = lows; 
 
-    console.log('chart data before chart render', allData);
-    console.log('labels before chart render', label);
-    console.log('line data chart render', lineData);
-    return (
-    <>
-        {<Line options={options} data={lineData} />}
-    </>
-    );
+      })
+      .catch(err => console.log('Error: ', err));
+    },[]);
+
+    return (<>{apiResult ? <Line options={options} data={lineData} /> : <h4>Loading...</h4>}</>);
 }
