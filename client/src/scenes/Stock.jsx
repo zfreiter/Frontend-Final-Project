@@ -1,3 +1,4 @@
+// mui, react, router
 import {useState, useEffect} from 'react';
 import Box from '@mui/material/Box' 
 import TextField from '@mui/material/TextField' 
@@ -6,7 +7,8 @@ import Tab from '@mui/material/Tab';
 import Button from '@mui/material/Button';
 import { PropTypes } from 'prop-types';
 import Typography from '@mui/material/Typography';
-import {useSearchParams} from 'react-router-dom';
+import {useSearchParams, redirect} from 'react-router-dom';
+
 
 // icons
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
@@ -92,6 +94,13 @@ export default function Stock() {
   const ticker = searchParams.get('id');
   const overviewAPIURL = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=demo}`;
 
+  if (ticker === null) {
+    return (
+    <Box sx={{margin: '5%', textAlign:'center'}}>
+      <Typography variant='h4' sx={{color: 'darkred'}}>Error: Stock Symbol Not Found.</Typography>
+    </Box>
+  )}
+
   useEffect(() => {
     fetch(overviewAPIURL)
     .then(response => {return response.json()})
@@ -107,11 +116,7 @@ export default function Stock() {
 
   const ToInitialCase = (srcString) => {
     return srcString.toLowerCase().split(' ').map((word) => word = `${word[0].toUpperCase()}${word.slice(1, word.length)}`).join(' ');
-  }
-
-  console.log(timeSeries);
-
-  
+  }  
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -125,7 +130,6 @@ export default function Stock() {
     console.log('30 day view');
     setDisplayRangeDays(30);
   }
-//718963
   return (<>
     {timeSeries ?
      <><Box sx={{ margin: '3%', borderStyle: 'solid' }}>
