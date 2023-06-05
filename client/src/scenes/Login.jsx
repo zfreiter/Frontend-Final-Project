@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import ImageList from '@mui/material/ImageList';
-import CSImage from '../images/P3.jpg';
+import CSImage from '../images/C1.jpg';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import Button from '@mui/material/Button';
@@ -142,12 +142,71 @@ export default function Login(props) {
                 color: 'darkorange',
               }}
             >
-              Welcome To Your Next Portfolio Manager
-            </Typography>
-          </ImageList>
-        </Box>
-        {isLogin ? (
-          <Box sx={{ width: '45%', borderStyle: 'none' }}>
+                Welcome To Your Next Portfolio Manager
+              </Typography>
+            </ImageList>
+          </Box>
+          {isLogin ? (
+            <Box sx={{ width: '45%', borderStyle: 'none' }}>
+              <Box
+                className='container'
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  backgroundColor: 'gainsboro',
+                  margin: 'auto',
+                  width: '80%',
+                  height: '400px',
+                  borderRadius: '10px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Typography
+                  variant='h1'
+                  gutterBottom
+                  sx={{ fontSize: 'xx-large', fontWeight: 'bold' }}
+                >
+                  Sign In
+                </Typography>
+                <Typography
+                  variant='h2'
+                  gutterBottom
+                  sx={{ fontSize: 'medium', fontWeight: 'bold' }}
+                >
+                  Don't Have An Account?{' '}
+                  <a href='#' onClick={SetToRegister}>
+                    Register
+                  </a>
+                </Typography>
+                <TextField
+                  required
+                  id='outlined-basic'
+                  label='Username'
+                  variant='outlined'
+                  sx={{ width: '75%', marginBottom: '15px' }}
+                  value={username}
+                  onChange={UpdateUsername}
+                />
+                <TextField
+                  required
+                  id='outlined-password-input'
+                  label='Password'
+                  type='password'
+                  sx={{ width: '75%' }}
+                  value={pass}
+                  onChange={UpdatePassword}
+                />
+                <Button
+                  sx={{ marginTop: '50px', marginRight: '60%' }}
+                  variant='contained'
+                  onClick={SubmitLogin}
+                >
+                  Submit
+                </Button>
+              </Box>
+            </Box>
+          ) : (
             <Box
               className='container'
               sx={{
