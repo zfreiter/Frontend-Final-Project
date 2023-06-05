@@ -206,62 +206,7 @@ export default function Login(props) {
                 </Button>
               </Box>
             </Box>
-          ) : (
-            <Box
-              className='container'
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                backgroundColor: 'gainsboro',
-                margin: 'auto',
-                width: '80%',
-                height: '400px',
-                borderRadius: '10px',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Typography
-                variant='h1'
-                gutterBottom
-                sx={{ fontSize: 'xx-large', fontWeight: 'bold' }}
-              >
-                Sign In
-              </Typography>
-              <Typography variant='h2' gutterBottom sx={{ fontSize: 'medium', fontWeight: 'bold' }}>
-                Don't Have An Account?{' '}
-                <a href='#' onClick={SetToRegister}>
-                  Register
-                </a>
-              </Typography>
-              <TextField
-                required
-                id='outlined-basic'
-                label='Username'
-                variant='outlined'
-                sx={{ width: '75%', marginBottom: '15px' }}
-                value={username}
-                onChange={UpdateUsername}
-              />
-              <TextField
-                required
-                id='outlined-password-input'
-                label='Password'
-                type='password'
-                sx={{ width: '75%' }}
-                value={pass}
-                onChange={UpdatePassword}
-              />
-              <Button
-                sx={{ marginTop: '50px', marginRight: '60%' }}
-                variant='contained'
-                onClick={SubmitLogin}
-              >
-                Submit
-              </Button>
-            </Box>
-          </Box>
-        ) : (
+          ) : (            
           <Box
             className='container'
             sx={{
