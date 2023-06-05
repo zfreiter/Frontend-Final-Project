@@ -347,7 +347,7 @@ export default function Stock() {
           <Typography variant='h6' sx={{ marginLeft: '50%' }}>Date</Typography>
         </Box></>
     :
-    <h1>test</h1>
+    <h1>Loading...</h1>
     }
   </>);
 
