@@ -6,8 +6,16 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { setGroups, setLogin, setOwned } from '../redux/authSlice';
+import { useDispatch } from 'react-redux';
+import {
+  setGroups,
+  setLogin,
+  setOwned,
+  setCurrentStocks,
+  setCurrentStockInfo,
+  setStockString,
+  setStories,
+} from '../redux/authSlice';
 
 export default function Login(props) {
   // temp host variable
@@ -79,11 +87,13 @@ export default function Login(props) {
 
       const data = await response.json();
 
+      /* IF DATA IS VALID WE WILL SET ALL THE STATES */
       if (data) {
         dispatch(setLogin({ token: data.token, user: data.user }));
         dispatch(setOwned({ owned: data.user.stocksOwned }));
         dispatch(setGroups({ groups: data.user.stockGroups }));
 
+        /* GET THE STOCK THAT WE ARE CHECKING */
         const getStocks = [];
         data.user.stocksOwned.map((stock) => {
           getStocks.push(stock.name);
@@ -93,9 +103,37 @@ export default function Login(props) {
             getStocks.push(stock.name);
           });
         });
-        console.log('groupdata ', getStocks);
-        navigate('/home');
+
+        const currStock = [...new Set([...getStocks])];
+        dispatch(setCurrentStocks({ currentStocks: [...currStock] }));
+
+        /* CREATE A STRING TO GET THE CURRENT INFORMATION ABOUT OUR STOCKS */
+        let stocksStr = '';
+        currStock.map((stock) => {
+          stocksStr += stock + ',';
+        });
+        const editedStocksStr = stocksStr.slice(0, -1);
+        dispatch(setStockString({ stockString: editedStocksStr }));
+
+        const url = `http://localhost:3001/stock/information?parems=${editedStocksStr}`;
+        const options = {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+            'Content-Type': 'application/json',
+          },
+        };
+
+        const responseInfo = await fetch(url, options);
+        const result = await responseInfo.json();
+        dispatch(setCurrentStockInfo({ currentStockInfo: result }));
+
+        const urlStories = 'http://localhost:3001/stock/stories';
+        const responseStories = await fetch(urlStories, options);
+        const resultStories = await responseStories.json();
+        dispatch(setStories({ stories: resultStories }));
       }
+      navigate('/home');
     } catch (err) {
       console.log(err);
     }
