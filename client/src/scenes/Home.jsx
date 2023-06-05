@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <Box display={'flex'} justifyContent={'space-between'}>
       <Box display={'flex'} flexDirection={'column'} m={3}>
-        <Box display={'inherit'}>
+        <Box display={'flex'} flexWrap={'wrap'}>
           <Search />
           <OwnedBarChart />
         </Box>

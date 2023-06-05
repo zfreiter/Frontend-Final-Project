@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Link } from '@mui/material';
 import { useSelector } from 'react-redux';
@@ -9,24 +10,44 @@ import pic from '../images/statistics.jpg';
 import picTwo from '../images/businessman.jpg';
 import picThree from '../images/dollar.jpg';
 import picFour from '../images/shares.jpg';
+import picFive from '../images/pexels_burak_the_weekender_186464.jpg';
+import picSix from '../images/pexels_cottonbro-studio_3943748.jpg';
+import picSeven from '../images/pexels_cottonbro_studio_3943716.jpg';
+import picEight from '../images/pexels_pixabay_259132.jpg';
+import picNine from '../images/pexels_pixabay_534219.jpg';
+import picTen from '../images/pexels_pixabay_534229.jpg';
+import picEleven from '../images/pexels_skitterphoto_9660.jpg';
 const Stories = () => {
   const stories = useSelector((state) => state.auth.stories);
   const smallerSelection = stories; //.slice(0, 10);
-  const pictures = [pic, picTwo, picThree, picFour];
-  console.log(stories);
+  const pictures = [
+    pic,
+    picTwo,
+    picThree,
+    picFour,
+    picFive,
+    picSix,
+    picSeven,
+    picEight,
+    picNine,
+    picTen,
+    picEleven,
+  ];
+
   return (
     <Box>
       <Typography variant='h5'>Todays top market stories</Typography>
       <Box display={'flex'} flexWrap={'wrap'} gap={1}>
         {smallerSelection.map((story, key) => (
-          <Card key={key} sx={{ maxWidth: 300 }} elevation={5}>
-            <CardContent
-              sx={{
-                backgroundImage: `url(${pictures[Math.floor(Math.random() * 4)]})`,
-                backgroundColor: 'transparent',
-                backgroundSize: 'cover',
-              }}
-            >
+          <Card key={key} sx={{ maxWidth: 450 }} elevation={5}>
+            <CardContent>
+              <CardMedia
+                component='img'
+                height='125'
+                image={pictures[Math.floor(Math.random() * 10)]}
+                alt='Placement picture'
+              />
+
               <Typography sx={{ fontSize: 14 }} fontWeight={700} gutterBottom>
                 {story.newsTitle}
               </Typography>

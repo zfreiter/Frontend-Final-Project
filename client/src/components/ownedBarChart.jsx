@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import Card from '@mui/material/Card';
 import { useSelector } from 'react-redux';
 import {
   Chart as ChartJS,
@@ -30,8 +31,6 @@ const OwnedBarChart = () => {
   stocks.map((stock, key) => {
     labels.push(owned[key].name);
     values.push(parseInt((stock.regularMarketPrice * owned[key].amount).toFixed(2)));
-    console.log('amount ', owned[key].name);
-    console.log('price ', stock.symbol);
   });
 
   const options = {
@@ -45,11 +44,8 @@ const OwnedBarChart = () => {
         text: 'Your Market Value',
       },
     },
-    scales: {
-      y: {
-        beginAtZero: false,
-      },
-    },
+
+    maintainAspectRatio: false,
   };
 
   const data = {
@@ -64,9 +60,19 @@ const OwnedBarChart = () => {
   };
 
   return (
-    <Box ml={5} minHeight={'300px'} maxHeight={'300px'} minWidth={'800px'}>
+    <Card
+      elevation={5}
+      sx={{
+        p: 2,
+        ml: 5,
+        minHeight: '300px',
+        maxHeight: '300px',
+        minWidth: '925px',
+        maxWidth: '925px',
+      }}
+    >
       <Bar options={options} data={data} />
-    </Box>
+    </Card>
   );
 };
 

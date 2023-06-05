@@ -17,6 +17,7 @@ import {
   setOwned,
   setStockString,
 } from '../redux/authSlice';
+
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -233,9 +234,21 @@ const Search = () => {
   return (
     <Box display={'flex'} flexDirection={'column'} gap={1} height={'300px'}>
       <Box display={'flex'} gap={'5px'}>
-        <Button variant='contained' autoFocus onClick={handleSearch}>
+        <Button
+          variant='contained'
+          autoFocus
+          onClick={handleSearch}
+          sx={{
+            boxShadow: 5,
+            '&:hover': {
+              backgroundColor: '#fff',
+              color: '#3c52b2',
+            },
+          }}
+        >
           Search
         </Button>
+
         <Autocomplete
           filterOptions={filterOptions}
           size='small'
@@ -247,7 +260,11 @@ const Search = () => {
           disablePortal
           id='stock-search-combo-box'
           options={combineData}
-          sx={{ width: 300 }}
+          sx={{
+            borderRadius: 1,
+            width: 300,
+            boxShadow: 5,
+          }}
           getOptionLabel={(option) => option.label}
           renderOption={(props, option) => (
             <Box {...props}>
@@ -258,7 +275,7 @@ const Search = () => {
         />
       </Box>
       {found && show && (
-        <Card elevation={3} sx={{ width: 'fit-content' }}>
+        <Card elevation={5} sx={{ width: 'fit-content' }}>
           <CardContent sx={{ p: 0, '&:last-child': { pb: 0 } }}>
             <Box
               position={'relative'}

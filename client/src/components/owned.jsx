@@ -20,7 +20,7 @@ const OwnedStocks = ({ title, data, type }) => {
   console.log(stocks);
   return (
     <Box sx={{ width: '400px', mb: 1 }}>
-      <Accordion autoFocus sx={{ border: 1 }}>
+      <Accordion autoFocus elevation={5}>
         <AccordionSummary
           autoFocus
           expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
