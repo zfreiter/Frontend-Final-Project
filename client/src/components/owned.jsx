@@ -17,7 +17,7 @@ const OwnedStocks = ({ title, data, type }) => {
       });
     });
   }
-
+  console.log(stocks);
   return (
     <Box sx={{ width: '400px', mb: 1 }}>
       <Accordion autoFocus sx={{ border: 1 }}>
@@ -68,7 +68,7 @@ const OwnedStocks = ({ title, data, type }) => {
                 </Box>
                 <Box>
                   <Typography fontSize={'10px'} textAlign={'right'}>
-                    ${stock.bid}
+                    ${stock.regularMarketPrice}
                   </Typography>
                   {type === 0 && (
                     <Typography fontSize={'10px'} textAlign={'right'} sx={{ whiteSpace: 'nowrap' }}>

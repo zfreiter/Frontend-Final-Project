@@ -11,7 +11,12 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { combineData } from '../stock_information/combineData';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCurrentStockInfo, setCurrentStocks, setStockString } from '../redux/authSlice';
+import {
+  setCurrentStockInfo,
+  setCurrentStocks,
+  setOwned,
+  setStockString,
+} from '../redux/authSlice';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -92,6 +97,8 @@ const Search = () => {
       dispatch(setCurrentStockInfo({ currentStockInfo: resultInfo }));
 
       dispatch(setCurrentStocks({ currentStocks: stockList }));
+      dispatch(setOwned({ owned: json.stocksOwned }));
+
       dispatch(setUser({ user: json }));
       setAmount(1);
       setOpenOwned(false);
@@ -225,7 +232,7 @@ const Search = () => {
 
   return (
     <Box display={'flex'} flexDirection={'column'} gap={1} height={'300px'}>
-      <Box display={'flex'} flexWrap={'wrap'} gap={'5px'}>
+      <Box display={'flex'} gap={'5px'}>
         <Button variant='contained' autoFocus onClick={handleSearch}>
           Search
         </Button>

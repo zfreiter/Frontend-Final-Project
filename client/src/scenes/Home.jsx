@@ -3,17 +3,23 @@ import { useSelector } from 'react-redux';
 import Search from '../components/search';
 import SimpleAccordion from '../components/owned';
 import Stories from '../components/stories';
+import OwnedBarChart from '../components/ownedBarChart';
+
 export default function Home() {
   const user = useSelector((state) => state.auth.user);
   const groups = useSelector((state) => state.auth.groups);
   const owned = useSelector((state) => state.auth.owned);
   const currentStk = useSelector((state) => state.auth.currentStocks);
-  const currentPrices = useSelector((state) => state.auth.currentPrices);
-
+  const currentStockInfo = useSelector((state) => state.auth.currentStockInfo);
+  const stkString = useSelector((state) => state.auth.stockString);
+  console.log('str ', currentStockInfo);
   return (
     <Box display={'flex'} justifyContent={'space-between'}>
       <Box display={'flex'} flexDirection={'column'} m={3}>
-        <Search />
+        <Box display={'inherit'}>
+          <Search />
+          <OwnedBarChart />
+        </Box>
         <Stories />
       </Box>
       <Box display={'flex'} flexDirection={'column'} m={3}>
