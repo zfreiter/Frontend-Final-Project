@@ -5,16 +5,11 @@ import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-
-import { Navigate } from 'react-router-dom';
-
-import { useSelector, useDispatch } from 'react-redux';
-import { setLogin, setLogout, setGroups, setOwned } from '../redux/authSlice';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setGroups, setLogin, setOwned } from '../redux/authSlice';
 
 export default function Login(props) {
-  //redux
-  const dispatch = useDispatch();
-
   // temp host variable
   let host = 'http://localhost:3001';
   const [username, setUsername] = useState('');
@@ -26,10 +21,8 @@ export default function Login(props) {
   const [last, setLast] = useState('');
 
   // LOGIN state
-  const [userAuthorized, setAuthorization] = useState(false);
-  const [userObject, setUserObject] = useState({});
-  const [useerToken, setUserToken] = useState('');
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const UpdateFirst = (event) => {
     setFirst(event.target.value);
   };
@@ -63,10 +56,10 @@ export default function Login(props) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(account),
     });
-
+    navigate('/');
     if (response.status === 201) {
       // redirect to login
-      setIsLogin(true);
+      //setIsLogin(true);
     } else {
       // prompt with error
     }
@@ -77,35 +70,34 @@ export default function Login(props) {
       email: username,
       password: pass,
     };
+    try {
+      const response = await fetch(`${host}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials),
+      });
 
-    const response = await fetch(`${host}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials),
-    });
+      const data = await response.json();
 
-    const data = await response.json();
-    console.log('data');
-    console.log(data);
+      if (data) {
+        dispatch(setLogin({ token: data.token, user: data.user }));
+        dispatch(setOwned({ owned: data.user.stocksOwned }));
+        dispatch(setGroups({ groups: data.user.stockGroups }));
 
-    console.log('token');
-    console.log(data.token);
-    if (data.token !== undefined && data.user !== undefined) {
-      // needs to go to redux
-      dispatch(
-        setLogin({
-          user: data.user,
-          token: data.token,
-        })
-      );
-      console.log("props")
-      console.log(props)
-      props.parentCallback(true);
-      //setUserToken(data.token);
-      //setUserObject(data.user);
-      setAuthorization(true);
-    } else {
-      //prompt error
+        const getStocks = [];
+        data.user.stocksOwned.map((stock) => {
+          getStocks.push(stock.name);
+        });
+        data.user.stockGroups.map((stock) => {
+          stock.map((stock) => {
+            getStocks.push(stock.name);
+          });
+        });
+        console.log('groupdata ', getStocks);
+        navigate('/home');
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -119,41 +111,37 @@ export default function Login(props) {
 
   return (
     <main>
-      {userAuthorized ? (
-        <Navigate to='/home' />
-      ) : (
-        <Box
-          sx={{ width: '100%', display: 'flex', alignItems: 'center', backgroundColor: '#0A1929' }}
-        >
-          <Box sx={{ width: '55%', borderStyle: 'none' }}>
-            <ImageList
+      <Box
+        sx={{ width: '100%', display: 'flex', alignItems: 'center', backgroundColor: '#0A1929' }}
+      >
+        <Box sx={{ width: '55%', borderStyle: 'none' }}>
+          <ImageList
+            sx={{
+              width: '100%',
+              height: '100vh',
+              overflow: 'hidden',
+              filter: 'brightness(100%)',
+              marginTop: 0,
+              marginBottom: 0,
+            }}
+          >
+            <img
+              src={CSImage}
+              height='100%'
+              alt='Image with neon colors and a geometric dog decoration'
+            />
+            <Typography
+              variant='h2'
+              gutterBottom
               sx={{
-                width: '100%',
-                height: '100vh',
-                overflow: 'hidden',
-                filter: 'brightness(100%)',
-                marginTop: 0,
-                marginBottom: 0,
+                position: 'absolute',
+                textAlign: 'center',
+                marginTop: '40%',
+                backdropFilter: 'brightness(0.5)',
+                filter: 'drop-shadow(2px 4px 6px black)',
+                color: 'darkorange',
               }}
             >
-              <img
-                src={CSImage}
-                height='100%'
-                width='1100px'
-                alt='Image with neon colors and a geometric dog decoration'
-              />
-              <Typography
-                variant='h2'
-                gutterBottom
-                sx={{
-                  position: 'absolute',
-                  textAlign: 'center',
-                  marginTop: '40%',
-                  backdropFilter: 'brightness(0.5)',
-                  filter: 'drop-shadow(2px 4px 6px black)',
-                  color: 'darkorange',
-                }}
-              >
                 Welcome To Your Next Portfolio Manager
               </Typography>
             </ImageList>
@@ -224,83 +212,137 @@ export default function Login(props) {
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                width: '35%',
-                height: 'fit-content',
-                borderStyle: 'none',
                 backgroundColor: 'gainsboro',
-                marginRight: 'auto',
-                marginLeft: 'auto',
-                justifyContent: 'center',
+                margin: 'auto',
+                width: '80%',
+                height: '400px',
+                borderRadius: '10px',
                 alignItems: 'center',
-                borderRadius: '5px',
+                justifyContent: 'center',
               }}
             >
               <Typography
                 variant='h1'
                 gutterBottom
-                sx={{ fontSize: 'xx-large', fontWeight: 'bold', marginTop: '20px' }}
+                sx={{ fontSize: 'xx-large', fontWeight: 'bold' }}
               >
-                Register
+                Sign In
               </Typography>
               <Typography variant='h2' gutterBottom sx={{ fontSize: 'medium', fontWeight: 'bold' }}>
-                Already have an account?{' '}
-                <a href='#' onClick={SetAsLogin}>
-                  Sign In
+                Don't Have An Account?{' '}
+                <a href='#' onClick={SetToRegister}>
+                  Register
                 </a>
               </Typography>
               <TextField
-                id='outlined-required-first'
                 required
-                label='First Name'
+                id='outlined-basic'
+                label='Username'
                 variant='outlined'
                 sx={{ width: '75%', marginBottom: '15px' }}
-                value={first}
-                onChange={UpdateFirst}
+                value={username}
+                onChange={UpdateUsername}
               />
               <TextField
-                id='outlined-required-last'
                 required
-                label='Last Name'
-                variant='outlined'
-                sx={{ width: '75%', marginBottom: '15px' }}
-                value={last}
-                onChange={UpdateLast}
-              />
-              <TextField
-                id='outlined-required-email'
-                required
-                label='Email'
-                variant='outlined'
-                sx={{ width: '75%', marginBottom: '15px' }}
-                value={email}
-                onChange={UpdateEmail}
-              />
-
-              <TextField
                 id='outlined-password-input'
-                required
                 label='Password'
                 type='password'
-                sx={{ width: '75%', marginBottom: '20px' }}
+                sx={{ width: '75%' }}
                 value={pass}
                 onChange={UpdatePassword}
               />
-
               <Button
-                sx={{
-                  marginTop: '20px',
-                  marginRight: '55%',
-                  marginBottom: '20px',
-                }}
+                sx={{ marginTop: '50px', marginRight: '60%' }}
                 variant='contained'
-                onClick={SubmitRegister}
+                onClick={SubmitLogin}
               >
-                Register
+                Submit
               </Button>
             </Box>
-          )}
-        </Box>
-      )}
+          </Box>
+        ) : (
+          <Box
+            className='container'
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '35%',
+              height: 'fit-content',
+              borderStyle: 'none',
+              backgroundColor: 'gainsboro',
+              marginRight: 'auto',
+              marginLeft: 'auto',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: '5px',
+            }}
+          >
+            <Typography
+              variant='h1'
+              gutterBottom
+              sx={{ fontSize: 'xx-large', fontWeight: 'bold', marginTop: '20px' }}
+            >
+              Register
+            </Typography>
+            <Typography variant='h2' gutterBottom sx={{ fontSize: 'medium', fontWeight: 'bold' }}>
+              Already have an account?{' '}
+              <a href='#' onClick={SetAsLogin}>
+                Sign In
+              </a>
+            </Typography>
+            <TextField
+              id='outlined-required-first'
+              required
+              label='First Name'
+              variant='outlined'
+              sx={{ width: '75%', marginBottom: '15px' }}
+              value={first}
+              onChange={UpdateFirst}
+            />
+            <TextField
+              id='outlined-required-last'
+              required
+              label='Last Name'
+              variant='outlined'
+              sx={{ width: '75%', marginBottom: '15px' }}
+              value={last}
+              onChange={UpdateLast}
+            />
+            <TextField
+              id='outlined-required-email'
+              required
+              label='Email'
+              variant='outlined'
+              sx={{ width: '75%', marginBottom: '15px' }}
+              value={email}
+              onChange={UpdateEmail}
+            />
+
+            <TextField
+              id='outlined-password-input'
+              required
+              label='Password'
+              type='password'
+              sx={{ width: '75%', marginBottom: '20px' }}
+              value={pass}
+              onChange={UpdatePassword}
+            />
+
+            <Button
+              sx={{
+                marginTop: '20px',
+                marginRight: '55%',
+                marginBottom: '20px',
+              }}
+              variant='contained'
+              onClick={SubmitRegister}
+            >
+              Register
+            </Button>
+          </Box>
+        )}
+      </Box>
     </main>
   );
 }

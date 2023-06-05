@@ -4,6 +4,6 @@ import { updateOwned } from '../controllers/stocksOwned.js';
 const router = express.Router();
 
 /* PATCH */
-router.patch('/owned', updateOwned);
+router.patch('/owned', verifyToken, updateOwned);
 
 export default router;
