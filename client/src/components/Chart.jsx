@@ -76,11 +76,11 @@ export default function StockChart({name, symbol, range}) {
           labels.push(key);
           highs.push(Number(highValue));
           lows.push(Number(lowValue));
-
-          labels = labels.slice(0, range);
-          highs = highs.slice(0, range);
-          lows = lows.slice(0, range);
         }
+
+        labels = labels.slice(0, range);
+        highs = highs.slice(0, range);
+        lows = lows.slice(0, range);
 
         lineData.labels = labels.reverse();
         lineData.datasets[0].data = highs.reverse();
