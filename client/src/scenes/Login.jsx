@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import ImageList from '@mui/material/ImageList';
-import CSImage from '../images/P3.jpg';
+import CSImage from '../images/C1.jpg';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import Button from '@mui/material/Button';
@@ -139,6 +139,7 @@ export default function Login(props) {
               <img
                 src={CSImage}
                 height='100%'
+                width='1100px'
                 alt='Image with neon colors and a geometric dog decoration'
               />
               <Typography

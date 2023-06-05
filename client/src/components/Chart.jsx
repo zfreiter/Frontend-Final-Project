@@ -29,7 +29,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Chart.js Line Chart',
+      text: 'Daily High vs Lows',
     },
   },
 };
@@ -42,16 +42,16 @@ export const lineData = {
   labels,
   datasets: [
     {
-      label: 'Dataset 1',
+      label: 'Highs',
       data: d1,
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      borderColor: 'rgb(0, 115, 23)',
+      backgroundColor: 'rgba(0, 74, 15)',
     },
     {
-      label: 'Dataset 2',
+      label: 'Lows',
       data: d2,
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      borderColor: 'rgb(145, 0, 31)',
+      backgroundColor: 'rgba(94, 0, 20)',
     },
   ],
 };
@@ -77,14 +77,14 @@ export default function StockChart({name, symbol, range}) {
           highs.push(Number(highValue));
           lows.push(Number(lowValue));
 
-          labels = labels.slice(0, range).reverse();
-          highs = highs.slice(0, range).reverse();
-          lows = lows.slice(0, range).reverse();
+          labels = labels.slice(0, range);
+          highs = highs.slice(0, range);
+          lows = lows.slice(0, range);
         }
 
-        lineData.labels = labels;
-        lineData.datasets[0].data = highs;
-        lineData.datasets[1].data = lows; 
+        lineData.labels = labels.reverse();
+        lineData.datasets[0].data = highs.reverse();
+        lineData.datasets[1].data = lows.reverse(); 
 
       })
       .catch(err => console.log('Error: ', err));

@@ -38,7 +38,7 @@ const InputStyles = {
 const IconStyleLight = {
   marginRight: '5px',
   color: 'floralwhite',
-  backgroundColor: 'cadetblue',
+  backgroundColor: 'rgb(0, 74, 15)',
   borderRadius: '10px'
 }
 
@@ -165,7 +165,7 @@ export default function Stock() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+//718963
   return (
     <>
     <Box sx={{ margin: '3%', borderStyle: 'solid' }}>
@@ -173,11 +173,10 @@ export default function Stock() {
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Company Overview" {...a11yProps(0)} />
           <Tab label="Latest Analytical" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0} sx={{height: 'fit-content'}}>
-        <Box sx={{borderStyle: 'solid', height: '100%'}}>
+        <Box sx={{height: '100%'}}>
           <Box sx={{alignItems: 'center', flexWrap: 'wrap'}}>
             <TextField 
               id="CompanyName"
@@ -186,7 +185,7 @@ export default function Stock() {
               label="Company Name"
               defaultValue={`${stockData.Name} (${stockData.Symbol})`}
               variant="standard"
-              inputProps={{readOnly:true, style:{textAlign: 'center', fontSize: 'xx-large'}}}
+              inputProps={{readOnly:true, style:{textAlign: 'center', fontSize: 'xx-large', color: 'rgb(0, 74, 15)'}}}
               />
           </Box>
           <Box sx={{display: 'inline-flex', width: '100%', marginBottom: '20px'}}>
@@ -225,7 +224,7 @@ export default function Stock() {
         </Box>
       </TabPanel>
       <TabPanel value={value} index={1}>
-      <Box sx={{borderStyle: 'solid', height: '100%'}}>
+      <Box sx={{height: '100%'}}>
           <Box sx={{alignItems: 'center'}}>
             <TextField 
               id="CompanyName"
@@ -233,7 +232,7 @@ export default function Stock() {
               label=""
               defaultValue={`${stockData.Name} (${stockData.Symbol})`}
               variant="standard"
-              inputProps={{readOnly:true, style:{textAlign: 'center', fontSize: 'xx-large'}}}
+              inputProps={{readOnly:true, style:{textAlign: 'center', fontSize: 'xx-large', color: 'rgb(0, 74, 15)'}}}
               InputProps={InputAttributes}
               InputLabelProps={LabelProperties}
               />
@@ -397,12 +396,13 @@ export default function Stock() {
             </Typography>
         </Box>
       </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel>
     </Box>
-    <Box sx={{margin: '3%', borderStyle: 'solid'}}>
-      {<StockChart name={stockData.Name} symbol={stockData.Symbol} range={displayRangeDays}/>}
+    <Box sx={{margin: '3%'}}>
+      <Box sx={{width: '100%', height: '100%', display: 'inline-flex'}}>
+        <Typography sx={{paddingTop: '25%', textAlign:'center'}} variant='h6'>Price (USD)</Typography>
+        {<StockChart name={stockData.Name} symbol={stockData.Symbol} range={displayRangeDays}/>}
+      </Box>
+      <Typography variant='h6' sx={{marginLeft: '50%'}}>Date</Typography>
     </Box>
     </>
   );
