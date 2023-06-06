@@ -60,7 +60,7 @@ export default function Login(props) {
     if (last === '' || last === null || last === undefined) {
       errorString+= '- Last Name Invalid -' 
     }
-    if (email === '' || email === null || email === undefined || !email.included('@')) {
+    if (email === '' || email === null || email === undefined || !email.includes('@')) {
       errorString+= '- Email Is Invalid -' 
     }
     if (pass === '' || pass === null || pass === undefined) {
@@ -117,7 +117,7 @@ export default function Login(props) {
       console.log('response', response);
       if (!response.ok) {
         
-        setErrorMessage('Email and Password Combination Not Found');
+        setErrorMessage('Email / Password Combination Not Found');
         return;
       }
 
