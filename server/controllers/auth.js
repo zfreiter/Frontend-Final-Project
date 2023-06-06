@@ -16,7 +16,7 @@ export const register = async (req, res) => {
       email,
       password: passwordHash,
       stocksowend: [],
-      stockgroups: [],
+      stockgroups: [[], [], []],
     });
 
     const savedUser = await newUser.save();

@@ -19,7 +19,7 @@ import picTen from '../images/pexels_pixabay_534229.jpg';
 import picEleven from '../images/pexels_skitterphoto_9660.jpg';
 const Stories = () => {
   const stories = useSelector((state) => state.auth.stories);
-  const smallerSelection = stories; //.slice(0, 10);
+  const smallerSelection = stories.slice(0, 20);
   const pictures = [
     pic,
     picTwo,
@@ -32,11 +32,22 @@ const Stories = () => {
     picNine,
     picTen,
     picEleven,
+    pic,
+    picTwo,
+    picThree,
+    picFour,
+    picFive,
+    picSix,
+    picSeven,
+    picEight,
+    picNine,
   ];
 
   return (
     <Box>
-      <Typography variant='h5'>Todays top market stories</Typography>
+      <Box display={'flex'} width={'1365px'} borderRadius={1} mb={1} p={1} sx={{ boxShadow: 5 }}>
+        <Typography variant='h5'>Todays top market stories</Typography>
+      </Box>
       <Box display={'flex'} flexWrap={'wrap'} gap={1}>
         {smallerSelection.map((story, key) => (
           <Card key={key} sx={{ maxWidth: 450 }} elevation={5}>
@@ -44,7 +55,7 @@ const Stories = () => {
               <CardMedia
                 component='img'
                 height='125'
-                image={pictures[Math.floor(Math.random() * 10)]}
+                image={pictures[key]}
                 alt='Placement picture'
               />
 

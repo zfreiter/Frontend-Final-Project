@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   setCurrentStockInfo,
   setCurrentStocks,
+  setGroups,
   setOwned,
   setStockString,
 } from '../redux/authSlice';
@@ -73,7 +74,7 @@ const Search = () => {
       const json = await response.json();
 
       const stockList = [...new Set([...currentStk, found.stock.label])];
-
+      console.log('currentstk ', currentStk);
       // Update string that contains a list of each stock used on the front page
       let stocksStr = '';
       stockList.map((stock) => {
@@ -133,9 +134,9 @@ const Search = () => {
       try {
         const response = await fetch(url, options);
         const json = await response.json();
-        console.log('new user ', json);
 
         const stockList = [...new Set([...currentStk, found.stock.label])];
+        dispatch(setGroups({ groups: json.stockGroups }));
         dispatch(setCurrentStocks({ currentStocks: stockList }));
 
         // Update string that contains a list of each stock used on the front page
@@ -144,24 +145,25 @@ const Search = () => {
           stocksStr += stock + ',';
         });
         const editedStocksStr = stocksStr.slice(0, -1);
-        dispatch(setStockString({ stockString: editedStocksStr }));
+        if (editedStocksStr !== stockString) {
+          dispatch(setStockString({ stockString: editedStocksStr }));
 
-        const urlInfo = `http://localhost:3001/stock/information?parems=${editedStocksStr}`;
-        const optionsInfo = {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        };
+          const urlInfo = `http://localhost:3001/stock/information?parems=${editedStocksStr}`;
+          const optionsInfo = {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          };
 
-        // Get the new stock info for the home page and update the state
-        const responseInfo = await fetch(urlInfo, optionsInfo);
-        const resultInfo = await responseInfo.json();
+          // Get the new stock info for the home page and update the state
+          const responseInfo = await fetch(urlInfo, optionsInfo);
+          const resultInfo = await responseInfo.json();
 
-        dispatch(setCurrentStockInfo({ currentStockInfo: resultInfo }));
-
-        dispatch(setUser({ user: json }));
+          dispatch(setCurrentStockInfo({ currentStockInfo: resultInfo }));
+          dispatch(setUser({ user: json }));
+        }
         setSelectGroup('');
         setOpenGroup(false);
       } catch (err) {
@@ -232,7 +234,7 @@ const Search = () => {
   };
 
   return (
-    <Box display={'flex'} flexDirection={'column'} gap={1} height={'300px'}>
+    <Box display={'flex'} flexDirection={'column'} gap={1} mb={3} height={'310px'}>
       <Box display={'flex'} gap={'5px'}>
         <Button
           variant='contained'
@@ -280,7 +282,9 @@ const Search = () => {
             <Box
               position={'relative'}
               width={'397.75px'}
+              height={'400px'}
               borderRadius={1}
+              mt={1}
               borderColor={'#C4C4C4'}
               p={2}
             >
@@ -291,12 +295,14 @@ const Search = () => {
                   top: '5px',
                   right: '5px',
                   '&:hover': {
-                    color: '#555555',
+                    color: '#AB0227',
                   },
                 }}
                 onClick={() => setShow((current) => !current)}
               />
-              <Typography fontWeight={'600'}>{found.stock.name}</Typography>
+              <Typography fontWeight={'600'} mt={3}>
+                {found.stock.name}
+              </Typography>
               <Typography>{found.stock.label}</Typography>
               <Typography>${found.price}</Typography>
               {found.changePercentage >= 0 ? (
@@ -310,11 +316,11 @@ const Search = () => {
               )}
               <Typography>volume {found.totalVol}</Typography>
               <Typography fontSize={'12px'}>{found.date}</Typography>
-              <Box display={'flex'} mt={1}>
+              <Box display={'flex'} mt={2}>
                 <Button
                   variant='contained'
                   disabled={own.some((stock) => stock.name === found.stock.label)}
-                  sx={{ mr: '10px', fontSize: '10px' }}
+                  sx={{ mr: '10px', fontSize: '10px', width: '119.25px' }}
                   onClick={openOwnedModal}
                 >
                   {own.some((stock) => stock.name === found.stock.label) ? 'Owned' : 'Add to Owned'}

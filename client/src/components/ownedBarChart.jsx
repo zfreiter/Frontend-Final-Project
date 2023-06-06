@@ -1,4 +1,3 @@
-import { Box } from '@mui/material';
 import Card from '@mui/material/Card';
 import { useSelector } from 'react-redux';
 import {
@@ -65,10 +64,8 @@ const OwnedBarChart = () => {
       sx={{
         p: 2,
         ml: 5,
-        minHeight: '300px',
-        maxHeight: '300px',
-        minWidth: '925px',
-        maxWidth: '925px',
+        height: '310px',
+        width: '925px',
       }}
     >
       <Bar options={options} data={data} />

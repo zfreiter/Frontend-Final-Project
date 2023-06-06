@@ -12,7 +12,7 @@ export default function Home() {
   const currentStk = useSelector((state) => state.auth.currentStocks);
   const currentStockInfo = useSelector((state) => state.auth.currentStockInfo);
   const stkString = useSelector((state) => state.auth.stockString);
-  console.log('str ', currentStockInfo);
+  //console.log('home groups ', owned);
   return (
     <Box display={'flex'} justifyContent={'space-between'}>
       <Box display={'flex'} flexDirection={'column'} m={3}>
@@ -23,8 +23,8 @@ export default function Home() {
         <Stories />
       </Box>
       <Box display={'flex'} flexDirection={'column'} m={3}>
-        <SimpleAccordion title={'Stocks'} data={user?.stocksOwned} type={0} />
-        {user?.stockGroups.map((group, key) => (
+        <SimpleAccordion title={'Stocks'} data={owned} type={0} />
+        {groups.map((group, key) => (
           <SimpleAccordion key={key} title={`GROUP ${key + 1}`} data={group} type={1} />
         ))}
       </Box>
