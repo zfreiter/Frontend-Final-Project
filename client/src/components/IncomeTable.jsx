@@ -7,10 +7,8 @@ import {useState, useEffect} from 'react';
 
 
 export default function IncomeTable({symbol}) {
-
-    
     const [incomeData, setIncomeData] = useState();
-    const IncomeUrl = `https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=${symbol}&apikey=55AAZ5Q51TMSDPYQ`;
+    const IncomeUrl = `https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=${symbol}&apikey=demo`;
 
     useEffect(() => {
         fetch(IncomeUrl)
