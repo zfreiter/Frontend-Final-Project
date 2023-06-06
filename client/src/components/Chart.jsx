@@ -61,6 +61,8 @@ export default function StockChart({name, symbol, range}) {
     const [apiResult, setAPIResult] = useState();
     const chartApiURL = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=demo`;
 
+    options.plugins.title.text = `${symbol} Daily Highs vs Lows`;
+
     useEffect(() => {
       fetch(chartApiURL)
       .then(response => {return response.json()})

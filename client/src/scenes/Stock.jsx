@@ -7,7 +7,7 @@ import Tab from '@mui/material/Tab';
 import Button from '@mui/material/Button';
 import { PropTypes } from 'prop-types';
 import Typography from '@mui/material/Typography';
-import {useSearchParams, redirect} from 'react-router-dom';
+import {useSearchParams, useParams} from 'react-router-dom';
 
 
 // icons
@@ -91,7 +91,10 @@ export default function Stock() {
   const [timeSeries, setTimeSeries] = useState();
   const [searchParams, setSearchParams] = useSearchParams();
   
-  const ticker = searchParams.get('id');
+
+  const {id} = useParams();
+  const ticker = id;
+  debugger;
   const overviewAPIURL = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=demo}`;
 
   if (ticker === null) {
@@ -344,11 +347,11 @@ export default function Stock() {
           </Box>
         </TabPanel>
       </Box><Box sx={{ margin: '3%' }}>
-          <Box sx={{ width: '100%', height: '100%', display: 'inline-flex' }}>
-            <Typography sx={{ paddingTop: '25%', textAlign: 'center' }} variant='h6'>Price (USD)</Typography>
+          <Box sx={{ width: '50%', height: '100%', display: 'inline-flex' }}>
+            <Typography sx={{ paddingTop: '25%', textAlign: 'center' }} variant='subtitle1'>Price (USD)</Typography>
             <StockChart name={timeSeries.Name} symbol={timeSeries.Symbol} range={displayRangeDays} />
           </Box>
-          <Typography variant='h6' sx={{ marginLeft: '50%' }}>Date</Typography>
+          <Typography variant='subtitle1' sx={{ marginLeft: '25%' }}>Date</Typography>
         </Box></>
     :
     <h1>Loading...</h1>
