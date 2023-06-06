@@ -9,7 +9,6 @@ import { PropTypes } from 'prop-types';
 import Typography from '@mui/material/Typography';
 import {useSearchParams, useParams} from 'react-router-dom';
 
-
 // icons
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
@@ -23,6 +22,7 @@ import BalanceIcon from '@mui/icons-material/Balance';
 
 // Components
 import StockChart from '../components/Chart';
+import IncomeTable from '../components/IncomeTable';
 
 const LabelProperties = {
   style: {fontWeight: 'bolder', fontSize: 'large'}
@@ -94,7 +94,6 @@ export default function Stock() {
 
   const {id} = useParams();
   const ticker = id;
-  debugger;
   const overviewAPIURL = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=demo}`;
 
   if (ticker === null) {
@@ -346,13 +345,15 @@ export default function Stock() {
             </Typography>
           </Box>
         </TabPanel>
-      </Box><Box sx={{ margin: '3%' }}>
-          <Box sx={{ width: '50%', height: '100%', display: 'inline-flex' }}>
-            <Typography sx={{ paddingTop: '25%', textAlign: 'center' }} variant='subtitle1'>Price (USD)</Typography>
+      </Box>
+      <Box sx={{display: 'flex', height: '400px', margin: '3%' }}>
+          <Box sx={{ width: '50%', height: '100%', display: 'inline-flex', borderStyle: 'solid',  alignItems: 'center' }}>
             <StockChart name={timeSeries.Name} symbol={timeSeries.Symbol} range={displayRangeDays} />
           </Box>
-          <Typography variant='subtitle1' sx={{ marginLeft: '25%' }}>Date</Typography>
-        </Box></>
+          <Box sx={{height: '100%', width: '50%', borderStyle: 'solid'}}>
+            <IncomeTable symbol={timeSeries.Symbol} />
+          </Box>
+      </Box></>
     :
     <h1>Loading...</h1>
     }

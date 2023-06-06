@@ -128,6 +128,7 @@ export default function Login(props) {
             <img
               src={CSImage}
               height='100%'
+              width='1100px'
               alt='Image with neon colors and a geometric dog decoration'
             />
             <Typography

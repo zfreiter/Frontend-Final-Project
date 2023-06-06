@@ -29,7 +29,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Daily High vs Lows',
+      text: 'Daily High vs Low Price (USD)',
     },
   },
 };
@@ -61,7 +61,7 @@ export default function StockChart({name, symbol, range}) {
     const [apiResult, setAPIResult] = useState();
     const chartApiURL = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=demo`;
 
-    options.plugins.title.text = `${symbol} Daily Highs vs Lows`;
+    options.plugins.title.text = `${symbol} Daily High vs Low Price (USD)`;
 
     useEffect(() => {
       fetch(chartApiURL)
