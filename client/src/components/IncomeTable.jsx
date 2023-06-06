@@ -39,7 +39,7 @@ export default function IncomeTable({symbol}) {
                     label={`Fiscal Year End: ${incomeData.fiscalDateEnding}`}
                     defaultValue={'Income Statement Overview'}
                     sx={{width: '100%'}}
-                    inputProps={{style: {color: '#2e892e', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
+                    inputProps={{style: {color: '#004a0f', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
                     InputProps={{readOnly: true}}
                     />
                 </Box>
@@ -51,7 +51,7 @@ export default function IncomeTable({symbol}) {
                         color='success' 
                         defaultValue={Monify(incomeData.grossProfit)}
                         sx={{width: '45%'}}
-                        inputProps={{style: {color: '#2e892e', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
+                        inputProps={{style: {color: '#004a0f', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
                         InputProps={{readOnly: true}}
                         />
                         <TextField 
@@ -61,7 +61,7 @@ export default function IncomeTable({symbol}) {
                         color='success' 
                         defaultValue={Monify(incomeData.netIncome)}
                         sx={{width: '45%'}}
-                        inputProps={{style: {color: '#2e892e', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
+                        inputProps={{style: {color: '#004a0f', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
                         InputProps={{readOnly: true}}
                         />
                 </Box>
@@ -73,7 +73,7 @@ export default function IncomeTable({symbol}) {
                         color='success' 
                         defaultValue={Monify(incomeData.operatingExpenses)}
                         sx={{width: '45%'}}
-                        inputProps={{style: {color: '#2e892e', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
+                        inputProps={{style: {color: '#004a0f', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
                         InputProps={{readOnly: true}}
                         />
                         <TextField 
@@ -83,7 +83,7 @@ export default function IncomeTable({symbol}) {
                         color='success' 
                         defaultValue={Monify(incomeData.totalRevenue)}
                         sx={{width: '45%'}}
-                        inputProps={{style: {color: '#2e892e', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
+                        inputProps={{style: {color: '#004a0f', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
                         InputProps={{readOnly: true}}
                         />
                 </Box>
@@ -95,7 +95,7 @@ export default function IncomeTable({symbol}) {
                         color='success' 
                         defaultValue={Monify(incomeData.costofGoodsAndServicesSold)}
                         sx={{width: '45%'}}
-                        inputProps={{style: {color: '#2e892e', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
+                        inputProps={{style: {color: '#004a0f', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
                         InputProps={{readOnly: true}}
                         />
                         <TextField 
@@ -105,7 +105,7 @@ export default function IncomeTable({symbol}) {
                         color='success' 
                         defaultValue={Monify(incomeData.depreciation)}
                         sx={{width: '45%'}}
-                        inputProps={{style: {color: '#2e892e', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
+                        inputProps={{style: {color: '#004a0f', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
                         InputProps={{readOnly: true}}
                         />
                 </Box>
@@ -117,7 +117,7 @@ export default function IncomeTable({symbol}) {
                         color='success' 
                         defaultValue={Monify(incomeData.interestAndDebtExpense)}
                         sx={{width: '45%'}}
-                        inputProps={{style: {color: '#2e892e', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
+                        inputProps={{style: {color: '#004a0f', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
                         InputProps={{readOnly: true}}
                         />
                         <TextField 
@@ -127,7 +127,7 @@ export default function IncomeTable({symbol}) {
                         color='success' 
                         defaultValue={Monify(incomeData.incomeBeforeTax)}
                         sx={{width: '45%'}}
-                        inputProps={{style: {color: '#2e892e', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
+                        inputProps={{style: {color: '#004a0f', fontWeight: 'bold', textAlign: 'center', fontSize: 'large'}}}
                         InputProps={{readOnly: true}}
                         />
                 </Box>

@@ -347,10 +347,10 @@ export default function Stock() {
         </TabPanel>
       </Box>
       <Box sx={{display: 'flex', height: '400px', margin: '3%' }}>
-          <Box sx={{ width: '50%', height: '100%', display: 'inline-flex', borderStyle: 'solid',  alignItems: 'center' }}>
+          <Box sx={{ width: '50%', height: '100%', display: 'inline-flex', alignItems: 'center' }}>
             <StockChart name={timeSeries.Name} symbol={timeSeries.Symbol} range={displayRangeDays} />
           </Box>
-          <Box sx={{height: '100%', width: '50%', borderStyle: 'solid'}}>
+          <Box sx={{height: '100%', width: '50%'}}>
             <IncomeTable symbol={timeSeries.Symbol} />
           </Box>
       </Box></>
