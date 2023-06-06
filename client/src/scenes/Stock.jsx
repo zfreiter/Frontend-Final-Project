@@ -117,6 +117,10 @@ export default function Stock() {
   }
 
   const ToInitialCase = (srcString) => {
+    if (srcString === undefined) {
+      return 'Not Available';
+    }
+   // debugger;
     return srcString.toLowerCase().split(' ').map((word) => word = `${word[0].toUpperCase()}${word.slice(1, word.length)}`).join(' ');
   }  
 
@@ -171,7 +175,7 @@ export default function Stock() {
               <TextField
                 id="Type"
                 label="Type"
-                defaultValue={ToInitialCase(timeSeries.AssetType.toUpperCase())}
+                defaultValue={ToInitialCase(timeSeries?.AssetType?.toUpperCase() ?? 'Not Available')}
                 variant="standard"
                 sx={{ margin: '5px', width: '33%' }}
                 InputProps={{ readOnly: true }} />
