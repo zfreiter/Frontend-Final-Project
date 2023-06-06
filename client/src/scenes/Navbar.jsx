@@ -17,32 +17,13 @@ export default function Navbar() {
         <Typography variant='h6' component='div'>
           Website Name
         </Typography>
-        <Stack direction='row' sx={{ flexgrow: 1 }}>
-          <Button color='inherit'>
-            <Link to='/home' style={{ textDecoration: 'none', color: 'inherit' }}>
-              Home
-            </Link>
-          </Button>
-          <Button color='inherit'>
-            <Link to='/about' style={{ textDecoration: 'none', color: 'inherit' }}>
-              About
-            </Link>
-          </Button>
-          <Button color='inherit'>
-            <Link to='/stocks' style={{ textDecoration: 'none', color: 'inherit' }}>
-              stocks
-            </Link>
-          </Button>
-          <Button color='inherit'>
-            <Link to='/cryptos' style={{ textDecoration: 'none', color: 'inherit' }}>
-              Cryptos
-            </Link>
-          </Button>
-          <Button color='inherit'>
-            <Link to='/account' style={{ textDecoration: 'none', color: 'inherit' }}>
-              Account
-            </Link>
-          </Button>
+        <Stack direction="row" sx={{flexgrow:1}}>
+          <Button color="inherit"><Link to="/home" style={{textDecoration: 'none', color: 'inherit'}}>Home</Link></Button>
+          <Button color="inherit"><Link to="/about" style={{textDecoration: 'none', color: 'inherit'}}>About</Link></Button>
+          <Button color="inherit"><Link to="/stocks" style={{textDecoration: 'none', color: 'inherit'}}>stocks</Link></Button>
+          <Button color="inherit"><Link to="/stock/IBM" style={{textDecoration: 'none', color: 'inherit'}}>stock</Link></Button>
+          <Button color="inherit"><Link to="/cryptos" style={{textDecoration: 'none', color: 'inherit'}}>Cryptos</Link></Button>
+          <Button color="inherit"><Link to="/account" style={{textDecoration: 'none', color: 'inherit'}}>Account</Link></Button>
         </Stack>
         <Button
           variant='outlined'
