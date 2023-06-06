@@ -19,10 +19,17 @@ export default function Login(props) {
   const [email, setEmail] = useState('');
   const [first, setFirst] = useState('');
   const [last, setLast] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   // LOGIN state
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const ClearErrorMessage = () => {
+    if (errorMessage !== '') {
+      setErrorMessage('');
+    }
+  }
   const UpdateFirst = (event) => {
     setFirst(event.target.value);
   };
@@ -35,15 +42,37 @@ export default function Login(props) {
     setEmail(event.target.value);
   };
   const UpdateUsername = (event) => {
+    ClearErrorMessage();
     setUsername(event.target.value);
-    console.log(username);
   };
 
   const UpdatePassword = (event) => {
+    ClearErrorMessage();
     setPass(event.target.value);
   };
 
   const SubmitRegister = async () => {
+    ClearErrorMessage();
+    let errorString = '';
+    if (first === '' || first === null || first === undefined) {
+      errorString+= '- First Name Invalid -' 
+    }
+    if (last === '' || last === null || last === undefined) {
+      errorString+= '- Last Name Invalid -' 
+    }
+    if (email === '' || email === null || email === undefined || !email.included('@')) {
+      errorString+= '- Email Is Invalid -' 
+    }
+    if (pass === '' || pass === null || pass === undefined) {
+      errorString+= '- Password Is Invalid -' 
+    }
+
+    if (errorString !== '') {
+      setErrorMessage(`Error: ${errorString}`);
+      return;
+    }
+
+
     let account = {
       firstName: first,
       lastName: last,
@@ -66,6 +95,14 @@ export default function Login(props) {
   };
 
   const SubmitLogin = async () => {
+    
+    ClearErrorMessage();
+    
+    if (!username.includes('@')) {
+      setErrorMessage('Invalid Email');
+      return;
+    }
+
     let credentials = {
       email: username,
       password: pass,
@@ -76,6 +113,13 @@ export default function Login(props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credentials),
       });
+
+      console.log('response', response);
+      if (!response.ok) {
+        
+        setErrorMessage('Email and Password Combination Not Found');
+        return;
+      }
 
       const data = await response.json();
 
@@ -102,10 +146,13 @@ export default function Login(props) {
   };
 
   const SetToRegister = () => {
+    setPass('');
+    setErrorMessage('');
     setIsLogin(false);
   };
 
   const SetAsLogin = () => {
+    setErrorMessage('');
     setIsLogin(true);
   };
 
@@ -183,7 +230,7 @@ export default function Login(props) {
                 <TextField
                   required
                   id='outlined-basic'
-                  label='Username'
+                  label='Email'
                   variant='outlined'
                   sx={{ width: '75%', marginBottom: '15px' }}
                   value={username}
@@ -198,6 +245,7 @@ export default function Login(props) {
                   value={pass}
                   onChange={UpdatePassword}
                 />
+                <Typography variant='h6' sx={{color: 'darkred'}}>{`${errorMessage}`}</Typography>
                 <Button
                   sx={{ marginTop: '50px', marginRight: '60%' }}
                   variant='contained'
@@ -274,7 +322,7 @@ export default function Login(props) {
               value={pass}
               onChange={UpdatePassword}
             />
-
+            <Typography variant='h6' sx={{color: 'darkred', width: '80%', textAlign: 'center'}}>{`${errorMessage}`}</Typography>
             <Button
               sx={{
                 marginTop: '20px',
