@@ -59,18 +59,18 @@ const Stories = () => {
                 alt='Placement picture'
               />
 
-              <Typography sx={{ fontSize: 17 }} mt={1} fontWeight={700} gutterBottom>
+              <Typography mt={1} fontSize={19} fontWeight={600} fontFamily={'Roboto'} gutterBottom>
                 {story.newsTitle}
               </Typography>
-              <Typography sx={{ fontSize: 11 }} fontWeight={700}>
+              <Typography fontSize={12} fontWeight={600} fontFamily={'Roboto'}>
                 {story.shotDesc}
               </Typography>
-              <Typography sx={{ fontSize: 10 }} mt={1}>
+              <Typography fontSize={12} fontWeight={600} fontFamily={'Roboto'} pt={2}>
                 {story.postedBy}
                 {story.postedOn}
               </Typography>
             </CardContent>
-            <CardActions sx={{ ml: 1, mb: 0 }}>
+            <CardActions sx={{ ml: 1, mb: 0, pl: 1, pt: 0 }}>
               <Link href={story.newsUrl} underline='hover' target='_blank'>
                 Read more
               </Link>

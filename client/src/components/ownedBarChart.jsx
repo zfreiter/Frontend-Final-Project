@@ -40,7 +40,7 @@ const OwnedBarChart = () => {
       },
       title: {
         display: true,
-        text: 'Your Market Value',
+        text: 'Market Value',
       },
     },
 

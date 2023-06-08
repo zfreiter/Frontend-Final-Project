@@ -1,12 +1,12 @@
 // mui, react, router
-import {useState, useEffect} from 'react';
-import Box from '@mui/material/Box' 
-import TextField from '@mui/material/TextField' 
+import { useState, useEffect } from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { PropTypes } from 'prop-types';
 import Typography from '@mui/material/Typography';
-import {useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 // icons
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
@@ -19,6 +19,7 @@ import PriceChangeIcon from '@mui/icons-material/PriceChange';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import BalanceIcon from '@mui/icons-material/Balance';
 
+import Navbar from './Navbar';
 // Components
 import StockChart from '../components/Chart';
 import IncomeTable from '../components/IncomeTable';
@@ -27,38 +28,38 @@ import IncomeTable from '../components/IncomeTable';
 import { useSelector } from 'react-redux';
 
 const LabelProperties = {
-  style: {fontWeight: 'bolder', fontSize: 'large'}
-}
+  style: { fontWeight: 'bolder', fontSize: 'large' },
+};
 
 const InputAttributes = {
-  readOnly:true,
-  disableUnderline: true
-}
+  readOnly: true,
+  disableUnderline: true,
+};
 
 const InputStyles = {
-  style:{
-    textAlign: 'center'
-  }
-}
+  style: {
+    textAlign: 'center',
+  },
+};
 
 const IconStyleLight = {
   marginRight: '5px',
   color: 'floralwhite',
   backgroundColor: 'rgb(0, 74, 15)',
-  borderRadius: '10px'
-}
+  borderRadius: '10px',
+};
 
 const AnalyticBoxStyle = {
   display: 'inline-flex',
-  marginTop: '20px'
-}
+  marginTop: '20px',
+};
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
@@ -87,23 +88,25 @@ function a11yProps(index) {
 }
 
 export default function Stock() {
-
   const [displayRangeDays, setDisplayRangeDays] = useState(15);
   const [value, setValue] = useState(0);
   const [timeSeries, setTimeSeries] = useState();
   const token = useSelector((state) => state.auth.token);
-    
-  const {id} = useParams();
+
+  const { id } = useParams();
 
   //NEW API CALL
   let serverURL = `${window.location.href.split('5173')[0]}3001/alphaVantage/overview?ticker=${id}`;
 
   if (id === null) {
     return (
-    <Box sx={{margin: '5%', textAlign:'center'}}>
-      <Typography variant='h4' sx={{color: 'darkred'}}>Error: Stock Symbol Not Found.</Typography>
-    </Box>
-  )}
+      <Box sx={{ margin: '5%', textAlign: 'center' }}>
+        <Typography variant='h4' sx={{ color: 'darkred' }}>
+          Error: Stock Symbol Not Found.
+        </Typography>
+      </Box>
+    );
+  }
 
   const options = {
     method: 'GET',
@@ -115,22 +118,28 @@ export default function Stock() {
 
   useEffect(() => {
     fetch(serverURL, options)
-    .then(response => {return response.json()})
-    .then(data => {
-      setTimeSeries(data);
-    });
-  },[]);
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setTimeSeries(data);
+      });
+  }, []);
 
   const Monify = (toMonify) => {
-    return new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(toMonify);
-  }
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(toMonify);
+  };
 
   const ToInitialCase = (srcString) => {
     if (srcString === undefined) {
       return 'Not Available';
     }
-    return srcString.toLowerCase().split(' ').map((word) => word = `${word[0].toUpperCase()}${word.slice(1, word.length)}`).join(' ');
-  }  
+    return srcString
+      .toLowerCase()
+      .split(' ')
+      .map((word) => (word = `${word[0].toUpperCase()}${word.slice(1, word.length)}`))
+      .join(' ');
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -138,237 +147,301 @@ export default function Stock() {
 
   const SetRangeTen = () => {
     setDisplayRangeDays(10);
-  }
+  };
 
   const SetRangeMonth = () => {
     console.log('30 day view');
     setDisplayRangeDays(30);
-  }
-  return (<>
-    {timeSeries ?
-     <><Box sx={{ margin: '3%', borderStyle: 'solid' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-            <Tab label="Company Overview" {...a11yProps(0)} />
-            <Tab label="Latest Analytical" {...a11yProps(1)} />
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0} sx={{ height: 'fit-content' }}>
-          <Box sx={{ height: '100%' }}>
-            <Box sx={{ alignItems: 'center', flexWrap: 'wrap' }}>
-              <TextField
-                id="CompanyName"
-                sx={{ width: '100%', marginBottom: '20px' }}
-
-                label="Company Name"
-                defaultValue={`${timeSeries.Name} (${timeSeries.Symbol})`}
-                variant="standard"
-                inputProps={{ readOnly: true, style: { textAlign: 'center', fontSize: 'xx-large', color: 'rgb(0, 74, 15)' } }} />
+  };
+  return (
+    <>
+      <Navbar />
+      {timeSeries ? (
+        <>
+          <Box sx={{ margin: '3%', borderStyle: 'solid' }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
+                <Tab label='Company Overview' {...a11yProps(0)} />
+                <Tab label='Latest Analytical' {...a11yProps(1)} />
+              </Tabs>
             </Box>
-            <Box sx={{ display: 'inline-flex', width: '100%', marginBottom: '20px' }}>
-              <TextField
-                id="Industry"
-                label="Industry"
-                defaultValue={ToInitialCase(timeSeries.Industry)}
-                variant="standard"
-                sx={{ margin: '5px', width: '33%' }}
-                InputProps={{ readOnly: true }} />
-              <TextField
-                id="Sector"
-                label="Sector"
-                defaultValue={ToInitialCase(timeSeries.Sector)}
-                variant="standard"
-                sx={{ margin: '5px', width: '33%' }}
-                InputProps={{ readOnly: true }} />
-              <TextField
-                id="Type"
-                label="Type"
-                defaultValue={ToInitialCase(timeSeries?.AssetType?.toUpperCase() ?? 'Not Available')}
-                variant="standard"
-                sx={{ margin: '5px', width: '33%' }}
-                InputProps={{ readOnly: true }} />
-            </Box>
-            <Box>
-              <Typography
-                variant="body1"
-                component="span"
-              >{timeSeries.Description}
-              </Typography>
-            </Box>
-          </Box>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <Box sx={{ height: '100%' }}>
-            <Box sx={{ alignItems: 'center' }}>
-              <TextField
-                id="CompanyName"
-                sx={{ width: '100%', marginBottom: '20px' }}
-                label=""
-                defaultValue={`${timeSeries.Name} (${timeSeries.Symbol})`}
-                variant="standard"
-                inputProps={{ readOnly: true, style: { textAlign: 'center', fontSize: 'xx-large', color: 'rgb(0, 74, 15)' } }}
-                InputProps={InputAttributes}
-                InputLabelProps={LabelProperties} />
-            </Box>
-            <Box sx={{ display: 'inline-flex', width: '100%', marginBottom: '20px' }}>
-              <TextField
-                id="Industry"
-                label="Industry"
-                defaultValue={ToInitialCase(timeSeries.Industry)}
-                variant="standard"
-                sx={{ margin: '5px', width: '33%' }}
-                InputProps={{ readOnly: true }}
-                InputLabelProps={LabelProperties} />
-              <TextField
-                id="Sector"
-                label="Sector"
-                defaultValue={ToInitialCase(timeSeries.Sector)}
-                variant="standard"
-                sx={{ margin: '5px', width: '33%' }}
-                InputProps={{ readOnly: true }}
-                InputLabelProps={LabelProperties} />
-              <TextField
-                id="Type"
-                label="Type"
-                defaultValue={ToInitialCase(timeSeries.AssetType)}
-                variant="standard"
-                sx={{ margin: '5px', width: '33%' }}
-                InputProps={{ readOnly: true }}
-                InputLabelProps={LabelProperties} />
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', marginTop: '20px' }}>
-              <Box sx={{ display: 'flex', flexDirection: 'column', width: '30%', alignItems: 'flex-end' }}>
-                <Box sx={AnalyticBoxStyle}>
-                  <TrendingUpIcon sx={IconStyleLight} />
+            <TabPanel value={value} index={0} sx={{ height: 'fit-content' }}>
+              <Box sx={{ height: '100%' }}>
+                <Box sx={{ alignItems: 'center', flexWrap: 'wrap' }}>
                   <TextField
-                    id="fiveTwoWeekHigh"
-                    label="52 Week High"
-                    defaultValue={Monify(timeSeries['52WeekHigh'])}
-                    variant="standard"
-                    sx={{ width: '100%' }}
-                    inputProps={InputStyles}
-                    InputProps={InputAttributes}
-                    InputLabelProps={LabelProperties} />
+                    id='CompanyName'
+                    sx={{ width: '100%', marginBottom: '20px' }}
+                    label='Company Name'
+                    defaultValue={`${timeSeries.Name} (${timeSeries.Symbol})`}
+                    variant='standard'
+                    inputProps={{
+                      readOnly: true,
+                      style: { textAlign: 'center', fontSize: 'xx-large', color: 'rgb(0, 74, 15)' },
+                    }}
+                  />
                 </Box>
-                <Box sx={AnalyticBoxStyle}>
-                  <AttachMoneyIcon sx={IconStyleLight} />
+                <Box sx={{ display: 'inline-flex', width: '100%', marginBottom: '20px' }}>
                   <TextField
-                    id="LatestDividend"
-                    label="Last Per-Share Dividend"
-                    defaultValue={Monify(timeSeries.DividendPerShare)}
-                    variant="standard"
-                    sx={{ width: '100%' }}
-                    inputProps={InputStyles}
-                    InputProps={InputAttributes}
-                    InputLabelProps={LabelProperties} />
+                    id='Industry'
+                    label='Industry'
+                    defaultValue={ToInitialCase(timeSeries.Industry)}
+                    variant='standard'
+                    sx={{ margin: '5px', width: '33%' }}
+                    InputProps={{ readOnly: true }}
+                  />
+                  <TextField
+                    id='Sector'
+                    label='Sector'
+                    defaultValue={ToInitialCase(timeSeries.Sector)}
+                    variant='standard'
+                    sx={{ margin: '5px', width: '33%' }}
+                    InputProps={{ readOnly: true }}
+                  />
+                  <TextField
+                    id='Type'
+                    label='Type'
+                    defaultValue={ToInitialCase(
+                      timeSeries?.AssetType?.toUpperCase() ?? 'Not Available'
+                    )}
+                    variant='standard'
+                    sx={{ margin: '5px', width: '33%' }}
+                    InputProps={{ readOnly: true }}
+                  />
                 </Box>
-                <Box sx={AnalyticBoxStyle}>
-                  <PercentIcon sx={IconStyleLight} />
-                  <TextField
-                    id="PERatio"
-                    label="PE Ratio"
-                    defaultValue={timeSeries.PERatio}
-                    variant="standard"
-                    sx={{ width: '100%' }}
-                    inputProps={InputStyles}
-                    InputProps={InputAttributes}
-                    InputLabelProps={LabelProperties} />
+                <Box>
+                  <Typography variant='body1' component='span'>
+                    {timeSeries.Description}
+                  </Typography>
                 </Box>
               </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'column', width: '30%', alignItems: 'center' }}>
-                <Box sx={AnalyticBoxStyle}>
-                  <TrendingDownIcon sx={IconStyleLight} />
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <Box sx={{ height: '100%' }}>
+                <Box sx={{ alignItems: 'center' }}>
                   <TextField
-                    id="fivetwoWeekLow"
-                    label="50 Week Low"
-                    defaultValue={Monify(timeSeries['52WeekLow'])}
-                    variant="standard"
-                    sx={{ width: '100%' }}
-                    inputProps={InputStyles}
+                    id='CompanyName'
+                    sx={{ width: '100%', marginBottom: '20px' }}
+                    label=''
+                    defaultValue={`${timeSeries.Name} (${timeSeries.Symbol})`}
+                    variant='standard'
+                    inputProps={{
+                      readOnly: true,
+                      style: { textAlign: 'center', fontSize: 'xx-large', color: 'rgb(0, 74, 15)' },
+                    }}
                     InputProps={InputAttributes}
-                    InputLabelProps={LabelProperties} />
+                    InputLabelProps={LabelProperties}
+                  />
                 </Box>
-                <Box sx={AnalyticBoxStyle}>
-                  <CurrencyExchangeIcon sx={IconStyleLight} />
+                <Box sx={{ display: 'inline-flex', width: '100%', marginBottom: '20px' }}>
                   <TextField
-                    id="DividendYield"
-                    label="Dividend Yield"
-                    defaultValue={timeSeries.DividendYield}
-                    variant="standard"
-                    sx={{ width: '100%' }}
-                    inputProps={InputStyles}
-                    InputProps={InputAttributes}
-                    InputLabelProps={LabelProperties} />
-                </Box>
-                <Box sx={AnalyticBoxStyle}>
-                  <PriceChangeIcon sx={IconStyleLight} />
+                    id='Industry'
+                    label='Industry'
+                    defaultValue={ToInitialCase(timeSeries.Industry)}
+                    variant='standard'
+                    sx={{ margin: '5px', width: '33%' }}
+                    InputProps={{ readOnly: true }}
+                    InputLabelProps={LabelProperties}
+                  />
                   <TextField
-                    id="ProfitMargin"
-                    label="Profit Margin"
-                    defaultValue={timeSeries.ProfitMargin}
-                    variant="standard"
-                    sx={{ width: '100%' }}
-                    inputProps={InputStyles}
-                    InputProps={InputAttributes}
-                    InputLabelProps={LabelProperties} />
+                    id='Sector'
+                    label='Sector'
+                    defaultValue={ToInitialCase(timeSeries.Sector)}
+                    variant='standard'
+                    sx={{ margin: '5px', width: '33%' }}
+                    InputProps={{ readOnly: true }}
+                    InputLabelProps={LabelProperties}
+                  />
+                  <TextField
+                    id='Type'
+                    label='Type'
+                    defaultValue={ToInitialCase(timeSeries.AssetType)}
+                    variant='standard'
+                    sx={{ margin: '5px', width: '33%' }}
+                    InputProps={{ readOnly: true }}
+                    InputLabelProps={LabelProperties}
+                  />
                 </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginBottom: '20px',
+                    marginTop: '20px',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      width: '30%',
+                      alignItems: 'flex-end',
+                    }}
+                  >
+                    <Box sx={AnalyticBoxStyle}>
+                      <TrendingUpIcon sx={IconStyleLight} />
+                      <TextField
+                        id='fiveTwoWeekHigh'
+                        label='52 Week High'
+                        defaultValue={Monify(timeSeries['52WeekHigh'])}
+                        variant='standard'
+                        sx={{ width: '100%' }}
+                        inputProps={InputStyles}
+                        InputProps={InputAttributes}
+                        InputLabelProps={LabelProperties}
+                      />
+                    </Box>
+                    <Box sx={AnalyticBoxStyle}>
+                      <AttachMoneyIcon sx={IconStyleLight} />
+                      <TextField
+                        id='LatestDividend'
+                        label='Last Per-Share Dividend'
+                        defaultValue={Monify(timeSeries.DividendPerShare)}
+                        variant='standard'
+                        sx={{ width: '100%' }}
+                        inputProps={InputStyles}
+                        InputProps={InputAttributes}
+                        InputLabelProps={LabelProperties}
+                      />
+                    </Box>
+                    <Box sx={AnalyticBoxStyle}>
+                      <PercentIcon sx={IconStyleLight} />
+                      <TextField
+                        id='PERatio'
+                        label='PE Ratio'
+                        defaultValue={timeSeries.PERatio}
+                        variant='standard'
+                        sx={{ width: '100%' }}
+                        inputProps={InputStyles}
+                        InputProps={InputAttributes}
+                        InputLabelProps={LabelProperties}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      width: '30%',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Box sx={AnalyticBoxStyle}>
+                      <TrendingDownIcon sx={IconStyleLight} />
+                      <TextField
+                        id='fivetwoWeekLow'
+                        label='50 Week Low'
+                        defaultValue={Monify(timeSeries['52WeekLow'])}
+                        variant='standard'
+                        sx={{ width: '100%' }}
+                        inputProps={InputStyles}
+                        InputProps={InputAttributes}
+                        InputLabelProps={LabelProperties}
+                      />
+                    </Box>
+                    <Box sx={AnalyticBoxStyle}>
+                      <CurrencyExchangeIcon sx={IconStyleLight} />
+                      <TextField
+                        id='DividendYield'
+                        label='Dividend Yield'
+                        defaultValue={timeSeries.DividendYield}
+                        variant='standard'
+                        sx={{ width: '100%' }}
+                        inputProps={InputStyles}
+                        InputProps={InputAttributes}
+                        InputLabelProps={LabelProperties}
+                      />
+                    </Box>
+                    <Box sx={AnalyticBoxStyle}>
+                      <PriceChangeIcon sx={IconStyleLight} />
+                      <TextField
+                        id='ProfitMargin'
+                        label='Profit Margin'
+                        defaultValue={timeSeries.ProfitMargin}
+                        variant='standard'
+                        sx={{ width: '100%' }}
+                        inputProps={InputStyles}
+                        InputProps={InputAttributes}
+                        InputLabelProps={LabelProperties}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      width: '30%',
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    <Box sx={AnalyticBoxStyle}>
+                      <CompareArrowsIcon sx={IconStyleLight} />
+                      <TextField
+                        id='MovingAVG'
+                        label='50 Day Moving Average'
+                        defaultValue={Monify(timeSeries['50DayMovingAverage'])}
+                        variant='standard'
+                        sx={{ width: '100%' }}
+                        inputProps={InputStyles}
+                        InputProps={InputAttributes}
+                        InputLabelProps={LabelProperties}
+                      />
+                    </Box>
+                    <Box sx={AnalyticBoxStyle}>
+                      <KeyboardReturnIcon sx={IconStyleLight} />
+                      <TextField
+                        id='ReturnAsset'
+                        label='Return on Assets TTM*'
+                        defaultValue={timeSeries.ReturnOnAssetsTTM}
+                        variant='standard'
+                        sx={{ width: '100%' }}
+                        inputProps={InputStyles}
+                        InputProps={InputAttributes}
+                        InputLabelProps={LabelProperties}
+                      />
+                    </Box>
+                    <Box sx={AnalyticBoxStyle}>
+                      <BalanceIcon sx={IconStyleLight} />
+                      <TextField
+                        id='ReturnEquity'
+                        label='Return on Equity TTM*'
+                        defaultValue={timeSeries.ReturnOnEquityTTM}
+                        variant='standard'
+                        sx={{ width: '100%' }}
+                        inputProps={InputStyles}
+                        InputProps={InputAttributes}
+                        InputLabelProps={LabelProperties}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+                <Typography
+                  variant='caption'
+                  dislay='block'
+                  sx={{ margin: '10px', fontStyle: 'italic' }}
+                >
+                  *TTM - Trailing Twelve Months, PE - Price per Earnings.
+                </Typography>
               </Box>
-              <Box sx={{ display: 'flex', flexDirection: 'column', width: '30%', alignItems: 'flex-start' }}>
-                <Box sx={AnalyticBoxStyle}>
-                  <CompareArrowsIcon sx={IconStyleLight} />
-                  <TextField
-                    id="MovingAVG"
-                    label="50 Day Moving Average"
-                    defaultValue={Monify(timeSeries['50DayMovingAverage'])}
-                    variant="standard"
-                    sx={{ width: '100%' }}
-                    inputProps={InputStyles}
-                    InputProps={InputAttributes}
-                    InputLabelProps={LabelProperties} />
-                </Box>
-                <Box sx={AnalyticBoxStyle}>
-                  <KeyboardReturnIcon sx={IconStyleLight} />
-                  <TextField
-                    id="ReturnAsset"
-                    label="Return on Assets TTM*"
-                    defaultValue={timeSeries.ReturnOnAssetsTTM}
-                    variant="standard"
-                    sx={{ width: '100%' }}
-                    inputProps={InputStyles}
-                    InputProps={InputAttributes}
-                    InputLabelProps={LabelProperties} />
-                </Box>
-                <Box sx={AnalyticBoxStyle}>
-                  <BalanceIcon sx={IconStyleLight} />
-                  <TextField
-                    id="ReturnEquity"
-                    label="Return on Equity TTM*"
-                    defaultValue={timeSeries.ReturnOnEquityTTM}
-                    variant="standard"
-                    sx={{ width: '100%' }}
-                    inputProps={InputStyles}
-                    InputProps={InputAttributes}
-                    InputLabelProps={LabelProperties} />
-                </Box>
-              </Box>
+            </TabPanel>
+          </Box>
+          <Box sx={{ display: 'flex', height: '400px', margin: '3%' }}>
+            <Box
+              sx={{ width: '50%', height: '100%', display: 'inline-flex', alignItems: 'center' }}
+            >
+              <StockChart
+                name={timeSeries.Name}
+                symbol={timeSeries.Symbol}
+                range={displayRangeDays}
+              />
             </Box>
-            <Typography variant='caption' dislay='block' sx={{ margin: '10px', fontStyle: 'italic' }}>
-              *TTM - Trailing Twelve Months, PE - Price per Earnings.
-            </Typography>
+            <Box sx={{ height: '100%', width: '50%' }}>
+              <IncomeTable symbol={timeSeries.Symbol} />
+            </Box>
           </Box>
-        </TabPanel>
-      </Box>
-      <Box sx={{display: 'flex', height: '400px', margin: '3%' }}>
-          <Box sx={{ width: '50%', height: '100%', display: 'inline-flex', alignItems: 'center' }}>
-            <StockChart name={timeSeries.Name} symbol={timeSeries.Symbol} range={displayRangeDays} />
-          </Box>
-          <Box sx={{height: '100%', width: '50%'}}>
-            <IncomeTable symbol={timeSeries.Symbol} />
-          </Box>
-      </Box></>
-    :
-    <h1>Loading...</h1>
-    }
-  </>);
-
+        </>
+      ) : (
+        <h1>Loading...</h1>
+      )}
+    </>
+  );
 }

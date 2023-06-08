@@ -18,17 +18,50 @@ export default function Navbar() {
           Website Name
         </Typography>
         <Stack direction='row' sx={{ flexgrow: 1 }}>
-          <Button color='inherit'>
-            <Link to='/home' style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Button
+            color='inherit'
+            sx={{
+              mx: 1,
+              '&:hover': {
+                color: '#003922',
+                backgroundColor: 'white',
+              },
+            }}
+          >
+            <Link
+              to='/home'
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+              }}
+            >
               Home
             </Link>
           </Button>
-          <Button color='inherit'>
+          <Button
+            color='inherit'
+            sx={{
+              mx: 1,
+              '&:hover': {
+                color: '#003922',
+                backgroundColor: 'white',
+              },
+            }}
+          >
             <Link to='/about' style={{ textDecoration: 'none', color: 'inherit' }}>
               About
             </Link>
           </Button>
-          <Button color='inherit'>
+          <Button
+            color='inherit'
+            sx={{
+              mx: 1,
+              '&:hover': {
+                color: '#003922',
+                backgroundColor: 'white',
+              },
+            }}
+          >
             <Link to='/account' style={{ textDecoration: 'none', color: 'inherit' }}>
               Account
             </Link>
@@ -37,7 +70,13 @@ export default function Navbar() {
         <Button
           variant='outlined'
           color='inherit'
-          sx={{ ml: 'auto' }}
+          sx={{
+            ml: 'auto',
+            '&:hover': {
+              color: '#AB0227',
+              backgroundColor: 'white',
+            },
+          }}
           onClick={() => dispatch(setLogout())}
         >
           Log out

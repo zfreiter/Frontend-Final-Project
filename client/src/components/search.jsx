@@ -9,6 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Divider from '@mui/material/Divider';
 import { Box, Button, TextField, Typography, Link } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import { combineData } from '../stock_information/combineData';
@@ -286,7 +287,9 @@ const Search = () => {
               p={2}
             >
               <Box display={'flex'} justifyContent={'space-between'}>
-                <Typography fontWeight={'600'}>{found.stock.name}</Typography>
+                <Typography fontWeight={'600'} fontFamily={'Roboto'} fontSize={20}>
+                  {found.stock.name}
+                </Typography>
                 <HighlightOffIcon
                   color='#555555'
                   sx={{
@@ -297,9 +300,11 @@ const Search = () => {
                   onClick={() => setShow((current) => !current)}
                 />
               </Box>
-              <Typography mb={7}>
+              <Typography>
                 <Link
                   fontWeight={'600'}
+                  fontFamily={'Roboto'}
+                  fontSize={18}
                   component='button'
                   variant='body2'
                   underline='hover'
@@ -308,19 +313,26 @@ const Search = () => {
                   {found.stock.label}
                 </Link>
               </Typography>
-              <Typography>${found.price}</Typography>
+              <Divider sx={{ mb: 3 }} />
+              <Typography fontSize={18} fontWeight={600} fontFamily={'Roboto'}>
+                ${found.price}
+              </Typography>
               {found.changePercentage >= 0 ? (
-                <Typography color={'green'} fontWeight={700}>
+                <Typography color={'green'} fontWeight={600} fontFamily={'Roboto'}>
                   {found.changePoint}({found.changePercentage}%)
                 </Typography>
               ) : (
-                <Typography color={'#AB0227'} fontWeight={700}>
+                <Typography color={'#AB0227'} fontSize={18} fontWeight={600} fontFamily={'Roboto'}>
                   {found.changePoint}({found.changePercentage}%)
                 </Typography>
               )}
-              <Typography>volume {found.totalVol}</Typography>
-              <Typography fontSize={'12px'}>{found.date}</Typography>
-              <Box display={'flex'} mt={0}>
+              <Typography fontSize={18} fontWeight={600} fontFamily={'Roboto'}>
+                volume {found.totalVol}
+              </Typography>
+              <Typography fontSize={12} fontWeight={600} fontFamily={'Roboto'}>
+                {found.date}
+              </Typography>
+              <Box display={'flex'} mt={2}>
                 <Button
                   variant='contained'
                   disabled={own.some((stock) => stock.name === found.stock.label)}
@@ -458,19 +470,37 @@ const Search = () => {
             >
               <Box display={'flex'}>
                 <ArrowForwardIcon />
-                <Typography fontSize={14} fontWeight={600} lineHeight={1.9}>
+                <Typography
+                  ml={1}
+                  fontSize={18}
+                  fontWeight={600}
+                  fontFamily={'Roboto'}
+                  lineHeight={1.5}
+                >
                   Search for stocks in the Nasdaq and Nyse.
                 </Typography>
               </Box>
               <Box display={'flex'}>
                 <ArrowForwardIcon />
-                <Typography fontSize={14} fontWeight={600} lineHeight={1.9}>
+                <Typography
+                  ml={1}
+                  fontSize={18}
+                  fontWeight={600}
+                  fontFamily={'Roboto'}
+                  lineHeight={1.5}
+                >
                   Add to your owned stocks
                 </Typography>
               </Box>
               <Box display={'flex'}>
                 <ArrowForwardIcon />
-                <Typography fontSize={14} fontWeight={600} lineHeight={1.9}>
+                <Typography
+                  ml={1}
+                  fontSize={18}
+                  fontWeight={600}
+                  fontFamily={'Roboto'}
+                  lineHeight={1.5}
+                >
                   Add to one of three watch groups
                 </Typography>
               </Box>

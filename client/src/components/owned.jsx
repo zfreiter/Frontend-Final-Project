@@ -192,8 +192,8 @@ const OwnedStocks = ({ title, data, type }) => {
           id='panel1a-header'
           sx={{ borderRadius: 1, '&:hover': { backgroundColor: '#c4c0c0' } }}
         >
-          <Typography autoFocus sx={{ color: 'green' }} fontWeight={700}>
-            {title}
+          <Typography autoFocus fontWeight={600} fontFamily={'Roboto'}>
+            {title === 'Stocks' ? `${title}` : `Watch ${title}`}
           </Typography>
         </AccordionSummary>
         <AccordionDetails sx={{}}>
@@ -214,17 +214,14 @@ const OwnedStocks = ({ title, data, type }) => {
                 p={1}
                 sx={{
                   width: '100%',
-                  // '&:hover': {
-                  //   borderRadius: 1,
-                  //   backgroundColor: '#e6e3e3',
-                  // },
-                  // '&:hover .MuiBox-root': {},
                 }}
               >
                 <Box>
-                  <Typography fontSize={'10px'}>
+                  <Typography>
                     <Link
-                      fontWeight={'600'}
+                      fontSize={16}
+                      fontWeight={600}
+                      fontFamily={'Roboto'}
                       component='button'
                       variant='body2'
                       underline='hover'
@@ -233,7 +230,7 @@ const OwnedStocks = ({ title, data, type }) => {
                       {stock.symbol}
                     </Link>
                   </Typography>
-                  <Typography fontSize={'10px'} fontWeight={'bold'}>
+                  <Typography fontSize={12} fontWeight={600} fontFamily={'Roboto'}>
                     {stock.shortName}
                   </Typography>
                 </Box>
@@ -242,12 +239,16 @@ const OwnedStocks = ({ title, data, type }) => {
                   <Box display={'flex'} justifyContent={'flex-end'}>
                     {type === 0 && (
                       <Typography
-                        fontSize={'10px'}
+                        fontSize={10}
+                        fontWeight={600}
+                        fontFamily={'Roboto'}
                         sx={{
+                          mt: 0.4,
                           whiteSpace: 'nowrap',
                           color: '#000000',
                           '&:hover': {
                             color: '#1D76D2',
+                            textDecoration: 'underline',
                           },
                         }}
                         onClick={() => openModal(key, stock.shortName, data[key].amount)}
@@ -257,18 +258,37 @@ const OwnedStocks = ({ title, data, type }) => {
                     )}
 
                     {type === 0 && <Divider orientation='vertical' flexItem sx={{ ml: 1 }} />}
-                    <Typography fontSize={'10px'} textAlign={'right'} ml={1}>
+                    <Typography
+                      fontSize={12}
+                      fontWeight={600}
+                      fontFamily={'Roboto'}
+                      textAlign={'right'}
+                      ml={1}
+                      mt={0.4}
+                    >
                       ${stock.regularMarketPrice}
                     </Typography>
                   </Box>
 
                   {stock.regularMarketChangePercent > 0 ? (
-                    <Typography textAlign={'right'} fontSize={'10px'} color={'green'}>
+                    <Typography
+                      textAlign={'right'}
+                      fontSize={12}
+                      fontWeight={600}
+                      fontFamily={'Roboto'}
+                      color={'green'}
+                    >
                       {stock.regularMarketChange.toFixed(2)}(
                       {stock.regularMarketChangePercent.toFixed(2)})%
                     </Typography>
                   ) : (
-                    <Typography textAlign={'right'} fontSize={'10px'} color={'#AB0227'}>
+                    <Typography
+                      textAlign={'right'}
+                      fontSize={12}
+                      fontWeight={600}
+                      fontFamily={'Roboto'}
+                      color={'#AB0227'}
+                    >
                       {stock.regularMarketChange.toFixed(2)}(
                       {stock.regularMarketChangePercent.toFixed(2)})%
                     </Typography>
@@ -277,6 +297,7 @@ const OwnedStocks = ({ title, data, type }) => {
                 <Divider orientation='vertical' flexItem sx={{ ml: 1 }} />
                 <DeleteForeverIcon
                   sx={{
+                    mt: 1,
                     ml: 1,
                     '&:hover': {
                       color: '#AB0227',

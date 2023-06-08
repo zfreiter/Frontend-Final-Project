@@ -1,3 +1,9 @@
+import Navbar from './Navbar';
 export default function About() {
-  return <h2>About Page - Unimplemented</h2>;
+  return (
+    <>
+      <Navbar />
+      <h2>About Page - Unimplemented</h2>
+    </>
+  );
 }
