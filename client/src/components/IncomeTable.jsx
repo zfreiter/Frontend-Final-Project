@@ -1,17 +1,27 @@
 // mui
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField' 
-
 // react
 import {useState, useEffect} from 'react';
+//redux
+import { useSelector } from 'react-redux';
 
 
 export default function IncomeTable({symbol}) {
     const [incomeData, setIncomeData] = useState();
-    const IncomeUrl = `https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=${symbol}&apikey=demo`;
+    const token = useSelector((state) => state.auth.token);
+
+    const serverURl = `${window.location.href.split('5173')[0]}3001/alphaVantage/incomestatement?ticker=${symbol}`
+    const options = {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      };
 
     useEffect(() => {
-        fetch(IncomeUrl)
+        fetch(serverURl, options)
         .then(response => {return response.json()})
         .then(data => {
             let myData = data['annualReports'][1];

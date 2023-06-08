@@ -4,10 +4,9 @@ import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField' 
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Button from '@mui/material/Button';
 import { PropTypes } from 'prop-types';
 import Typography from '@mui/material/Typography';
-import {useSearchParams, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 
 // icons
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
@@ -23,6 +22,9 @@ import BalanceIcon from '@mui/icons-material/Balance';
 // Components
 import StockChart from '../components/Chart';
 import IncomeTable from '../components/IncomeTable';
+
+// redux
+import { useSelector } from 'react-redux';
 
 const LabelProperties = {
   style: {fontWeight: 'bolder', fontSize: 'large'}
@@ -89,28 +91,35 @@ export default function Stock() {
   const [displayRangeDays, setDisplayRangeDays] = useState(15);
   const [value, setValue] = useState(0);
   const [timeSeries, setTimeSeries] = useState();
-  const [searchParams, setSearchParams] = useSearchParams();
-  
-
+  const token = useSelector((state) => state.auth.token);
+    
   const {id} = useParams();
-  const ticker = id;
-  const overviewAPIURL = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=demo}`;
 
-  if (ticker === null) {
+  //NEW API CALL
+  let serverURL = `${window.location.href.split('5173')[0]}3001/alphaVantage/overview?ticker=${id}`;
+
+  if (id === null) {
     return (
     <Box sx={{margin: '5%', textAlign:'center'}}>
       <Typography variant='h4' sx={{color: 'darkred'}}>Error: Stock Symbol Not Found.</Typography>
     </Box>
   )}
 
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  };
+
   useEffect(() => {
-    fetch(overviewAPIURL)
+    fetch(serverURL, options)
     .then(response => {return response.json()})
     .then(data => {
       setTimeSeries(data);
     });
   },[]);
-
 
   const Monify = (toMonify) => {
     return new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(toMonify);
@@ -120,7 +129,6 @@ export default function Stock() {
     if (srcString === undefined) {
       return 'Not Available';
     }
-   // debugger;
     return srcString.toLowerCase().split(' ').map((word) => word = `${word[0].toUpperCase()}${word.slice(1, word.length)}`).join(' ');
   }  
 
