@@ -16,11 +16,10 @@ const StockValue = () => {
   });
 
   const percentChange = (
-    ((regularMarketPreviousClose - regularMarketPrice) / regularMarketPreviousClose) *
+    ((regularMarketPrice - regularMarketPreviousClose) / regularMarketPreviousClose) *
     100
   ).toFixed(2);
-
-  const priceDifference = (regularMarketPreviousClose - regularMarketPrice).toFixed(2);
+  const priceDifference = (regularMarketPrice - regularMarketPreviousClose).toFixed(2);
 
   return (
     <Box
@@ -33,14 +32,23 @@ const StockValue = () => {
         boxShadow: 5,
       }}
     >
-      <Typography autoFocus pl={'16px'} fontWeight={700} alignSelf={'center'}>
+      <Typography
+        autoFocus
+        pl={'16px'}
+        fontSize={18}
+        fontWeight={600}
+        fontFamily={'Roboto'}
+        alignSelf={'center'}
+      >
         Today ${regularMarketPrice.toLocaleString()}
       </Typography>
       <Typography
         pl={'16px'}
-        fontWeight={700}
+        fontSize={18}
+        fontWeight={600}
+        fontFamily={'Roboto'}
         alignSelf={'center'}
-        color={regularMarketPrice - regularMarketPreviousClose > 0 ? 'green' : '#AB0227'}
+        color={priceDifference >= 0 ? 'green' : '#AB0227'}
       >
         {priceDifference}({percentChange}%)
       </Typography>

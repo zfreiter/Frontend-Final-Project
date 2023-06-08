@@ -17,7 +17,6 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      {loggedIn && <Navbar />}
       <Routes>
         <Route path='/' element={<Login />} />
         <Route path='/home' element={loggedIn ? <Home /> : <Navigate to='/' />} />
