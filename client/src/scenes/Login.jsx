@@ -38,7 +38,7 @@ export default function Login(props) {
     if (errorMessage !== '') {
       setErrorMessage('');
     }
-  }
+  };
   const UpdateFirst = (event) => {
     setFirst(event.target.value);
   };
@@ -64,23 +64,22 @@ export default function Login(props) {
     ClearErrorMessage();
     let errorString = '';
     if (first === '' || first === null || first === undefined) {
-      errorString+= '- First Name Invalid -' 
+      errorString += '- First Name Invalid -';
     }
     if (last === '' || last === null || last === undefined) {
-      errorString+= '- Last Name Invalid -' 
+      errorString += '- Last Name Invalid -';
     }
     if (email === '' || email === null || email === undefined || !email.includes('@')) {
-      errorString+= '- Email Is Invalid -' 
+      errorString += '- Email Is Invalid -';
     }
     if (pass === '' || pass === null || pass === undefined) {
-      errorString+= '- Password Is Invalid -' 
+      errorString += '- Password Is Invalid -';
     }
 
     if (errorString !== '') {
       setErrorMessage(`Error: ${errorString}`);
       return;
     }
-
 
     let account = {
       firstName: first,
@@ -89,7 +88,7 @@ export default function Login(props) {
       password: pass,
     };
     console.log(account);
-    const response = await fetch(`http://localhost:3001/auth/register`, {
+    const response = await fetch(`https://frontend-final-project-topaz.vercel.app/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(account),
@@ -104,9 +103,8 @@ export default function Login(props) {
   };
 
   const SubmitLogin = async () => {
-    
     ClearErrorMessage();
-    
+
     if (!username.includes('@')) {
       setErrorMessage('Invalid Email');
       return;
@@ -125,7 +123,6 @@ export default function Login(props) {
 
       console.log('response', response);
       if (!response.ok) {
-        
         setErrorMessage('Email / Password Combination Not Found');
         return;
       }
@@ -147,7 +144,7 @@ export default function Login(props) {
           const editedStocksStr = createStockStr(currStock);
           dispatch(setStockString({ stockString: editedStocksStr }));
 
-          const url = `http://localhost:3001/stock/information?parems=${editedStocksStr}`;
+          const url = `https:/frontend-final-project-topaz.vercel.app/stock/information?parems=${editedStocksStr}`;
           const options = {
             method: 'GET',
             headers: {
@@ -168,7 +165,7 @@ export default function Login(props) {
             'Content-Type': 'application/json',
           },
         };
-        const urlStories = 'http://localhost:3001/stock/stories';
+        const urlStories = 'https:/frontend-final-project-topaz.vercel.app/stock/stories';
         const responseStories = await fetch(urlStories, options);
         const resultStories = await responseStories.json();
         dispatch(setStories({ stories: resultStories }));
@@ -280,8 +277,8 @@ export default function Login(props) {
                 variant='contained'
                 onClick={SubmitLogin}
               >
-                  Submit
-                </Button>
+                Submit
+              </Button>
             </Box>
           </Box>
         ) : (
@@ -351,7 +348,10 @@ export default function Login(props) {
               value={pass}
               onChange={UpdatePassword}
             />
-           <Typography variant='h6' sx={{color: 'darkred', width: '80%', textAlign: 'center'}}>{`${errorMessage}`}</Typography>
+            <Typography
+              variant='h6'
+              sx={{ color: 'darkred', width: '80%', textAlign: 'center' }}
+            >{`${errorMessage}`}</Typography>
             <Button
               sx={{
                 marginTop: '20px',
@@ -369,4 +369,3 @@ export default function Login(props) {
     </main>
   );
 }
-
