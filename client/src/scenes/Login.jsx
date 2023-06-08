@@ -5,9 +5,18 @@ import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { groupStocks, createStockStr } from '../components/utilityService';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { setGroups, setLogin, setOwned } from '../redux/authSlice';
+import { useDispatch } from 'react-redux';
+import {
+  setGroups,
+  setLogin,
+  setOwned,
+  setCurrentStocks,
+  setCurrentStockInfo,
+  setStockString,
+  setStories,
+} from '../redux/authSlice';
 
 export default function Login(props) {
   // temp host variable
@@ -56,9 +65,9 @@ export default function Login(props) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(account),
     });
-    navigate('/');
+
     if (response.status === 201) {
-      // redirect to login
+      setIsLogin(true);
       //setIsLogin(true);
     } else {
       // prompt with error
@@ -79,23 +88,48 @@ export default function Login(props) {
 
       const data = await response.json();
 
+      /* IF DATA IS VALID WE WILL SET ALL THE STATES */
       if (data) {
         dispatch(setLogin({ token: data.token, user: data.user }));
         dispatch(setOwned({ owned: data.user.stocksOwned }));
         dispatch(setGroups({ groups: data.user.stockGroups }));
 
-        const getStocks = [];
-        data.user.stocksOwned.map((stock) => {
-          getStocks.push(stock.name);
-        });
-        data.user.stockGroups.map((stock) => {
-          stock.map((stock) => {
-            getStocks.push(stock.name);
-          });
-        });
-        console.log('groupdata ', getStocks);
-        navigate('/home');
+        const getStocks = groupStocks(data.user.stocksOwned, data.user.stockGroups);
+
+        if (getStocks.length > 0) {
+          const currStock = [...new Set([...getStocks])];
+          dispatch(setCurrentStocks({ currentStocks: [...currStock] }));
+
+          const editedStocksStr = createStockStr(currStock);
+          dispatch(setStockString({ stockString: editedStocksStr }));
+
+          const url = `http://localhost:3001/stock/information?parems=${editedStocksStr}`;
+          const options = {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${data.token}`,
+              'Content-Type': 'application/json',
+            },
+          };
+
+          const responseInfo = await fetch(url, options);
+          const result = await responseInfo.json();
+
+          dispatch(setCurrentStockInfo({ currentStockInfo: result }));
+        }
+        const options = {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+            'Content-Type': 'application/json',
+          },
+        };
+        const urlStories = 'http://localhost:3001/stock/stories';
+        const responseStories = await fetch(urlStories, options);
+        const resultStories = await responseStories.json();
+        dispatch(setStories({ stories: resultStories }));
       }
+      navigate('/home');
     } catch (err) {
       console.log(err);
     }
@@ -142,71 +176,67 @@ export default function Login(props) {
                 color: 'darkorange',
               }}
             >
-                Welcome To Your Next Portfolio Manager
-              </Typography>
-            </ImageList>
-          </Box>
-          {isLogin ? (
-            <Box sx={{ width: '45%', borderStyle: 'none' }}>
-              <Box
-                className='container'
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  backgroundColor: 'gainsboro',
-                  margin: 'auto',
-                  width: '80%',
-                  height: '400px',
-                  borderRadius: '10px',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
+              Welcome To Your Next Portfolio Manager
+            </Typography>
+          </ImageList>
+        </Box>
+        {isLogin ? (
+          <Box sx={{ width: '45%', borderStyle: 'none' }}>
+            <Box
+              className='container'
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                backgroundColor: 'gainsboro',
+                margin: 'auto',
+                width: '80%',
+                height: '400px',
+                borderRadius: '10px',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography
+                variant='h1'
+                gutterBottom
+                sx={{ fontSize: 'xx-large', fontWeight: 'bold' }}
               >
-                <Typography
-                  variant='h1'
-                  gutterBottom
-                  sx={{ fontSize: 'xx-large', fontWeight: 'bold' }}
-                >
-                  Sign In
-                </Typography>
-                <Typography
-                  variant='h2'
-                  gutterBottom
-                  sx={{ fontSize: 'medium', fontWeight: 'bold' }}
-                >
-                  Don't Have An Account?{' '}
-                  <a href='#' onClick={SetToRegister}>
-                    Register
-                  </a>
-                </Typography>
-                <TextField
-                  required
-                  id='outlined-basic'
-                  label='Username'
-                  variant='outlined'
-                  sx={{ width: '75%', marginBottom: '15px' }}
-                  value={username}
-                  onChange={UpdateUsername}
-                />
-                <TextField
-                  required
-                  id='outlined-password-input'
-                  label='Password'
-                  type='password'
-                  sx={{ width: '75%' }}
-                  value={pass}
-                  onChange={UpdatePassword}
-                />
-                <Button
-                  sx={{ marginTop: '50px', marginRight: '60%' }}
-                  variant='contained'
-                  onClick={SubmitLogin}
-                >
-                  Submit
-                </Button>
-              </Box>
+                Sign In
+              </Typography>
+              <Typography variant='h2' gutterBottom sx={{ fontSize: 'medium', fontWeight: 'bold' }}>
+                Don't Have An Account?{' '}
+                <a href='#' onClick={SetToRegister}>
+                  Register
+                </a>
+              </Typography>
+              <TextField
+                required
+                id='outlined-basic'
+                label='Username'
+                variant='outlined'
+                sx={{ width: '75%', marginBottom: '15px' }}
+                value={username}
+                onChange={UpdateUsername}
+              />
+              <TextField
+                required
+                id='outlined-password-input'
+                label='Password'
+                type='password'
+                sx={{ width: '75%' }}
+                value={pass}
+                onChange={UpdatePassword}
+              />
+              <Button
+                sx={{ marginTop: '50px', marginRight: '60%' }}
+                variant='contained'
+                onClick={SubmitLogin}
+              >
+                Submit
+              </Button>
             </Box>
-          ) : (            
+          </Box>
+        ) : (
           <Box
             className='container'
             sx={{
