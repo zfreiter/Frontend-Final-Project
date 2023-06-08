@@ -6,6 +6,7 @@ import * as dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import groupRoutes from './routes/groups.js';
 import ownedRoutes from './routes/owned.js';
+import stockRoutes from './routes/stocks.js';
 import alphaVantageRoutes from './routes/alphaVantage.js';
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(cors());
 app.use('/auth', authRoutes);
 app.use('/group', groupRoutes);
 app.use('/own', ownedRoutes);
+app.use('/stock', stockRoutes);
 app.use('/alphaVantage', alphaVantageRoutes);
 
 /* MONGOOSE SETUP */

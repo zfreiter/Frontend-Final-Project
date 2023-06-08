@@ -5,7 +5,10 @@ const initialState = {
   user: null,
   groups: [],
   owned: [],
-  stockPrices: [],
+  currentStocks: [],
+  currentStockInfo: [],
+  stockString: '',
+  stories: [],
 };
 
 export const authSlice = createSlice({
@@ -29,12 +32,30 @@ export const authSlice = createSlice({
     setOwned: (state, action) => {
       state.owned = action.payload.owned;
     },
-    setStockPrices: (state, action) => {
-      state.stockPrices = action.payload.owned;
+    setCurrentStocks: (state, action) => {
+      state.currentStocks = action.payload.currentStocks;
+    },
+    setCurrentStockInfo: (state, action) => {
+      state.currentStockInfo = action.payload.currentStockInfo;
+    },
+    setStockString: (state, action) => {
+      state.stockString = action.payload.stockString;
+    },
+    setStories: (state, action) => {
+      state.stories = action.payload.stories;
     },
   },
 });
 
-export const { setLogin, setLogout, setUser, setGroups, setOwned, setStockPrices } =
-  authSlice.actions;
+export const {
+  setLogin,
+  setLogout,
+  setUser,
+  setGroups,
+  setOwned,
+  setCurrentStocks,
+  setCurrentStockInfo,
+  setStockString,
+  setStories,
+} = authSlice.actions;
 export default authSlice.reducer;

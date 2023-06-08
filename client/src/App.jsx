@@ -25,8 +25,6 @@ export default function App() {
         <Route path='/Stocks' element={loggedIn ? <Stocks /> : <Navigate to='/' />} />
         <Route path='/Stock/:id' element={loggedIn ? <Stock /> : <Navigate to='/' />} />
         <Route path='/Account' element={loggedIn ? <Account /> : <Navigate to='/' />} />
-        <Route path='/Crypto' element={loggedIn ? <Crypto /> : <Navigate to='/' />} />
-        <Route path='/Cryptos' element={loggedIn ? <Cryptos /> : <Navigate to='/' />} />
       </Routes>
     </BrowserRouter>
   );
