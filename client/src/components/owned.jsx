@@ -70,9 +70,10 @@ const OwnedStocks = ({ title, data, type }) => {
   };
 
   const deleteGroup = async (stockToRemove, title) => {
-    const spot = title.slice(6);
-    // need to remove a group if it is empty
+    const spot = title.slice(7);
+
     let upDatedGroups = [...groups];
+
     let upDatedGroup = groups[spot - 1].filter((stock) => stock.name !== stockToRemove);
     if (upDatedGroup.lenth < 1) {
     }
