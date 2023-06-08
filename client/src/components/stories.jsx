@@ -59,7 +59,7 @@ const Stories = () => {
                 alt='Placement picture'
               />
 
-              <Typography sx={{ fontSize: 14 }} fontWeight={700} gutterBottom>
+              <Typography sx={{ fontSize: 17 }} mt={1} fontWeight={700} gutterBottom>
                 {story.newsTitle}
               </Typography>
               <Typography sx={{ fontSize: 11 }} fontWeight={700}>
@@ -70,7 +70,7 @@ const Stories = () => {
                 {story.postedOn}
               </Typography>
             </CardContent>
-            <CardActions sx={{ ml: 1 }}>
+            <CardActions sx={{ ml: 1, mb: 0 }}>
               <Link href={story.newsUrl} underline='hover' target='_blank'>
                 Read more
               </Link>

@@ -63,9 +63,9 @@ const OwnedBarChart = () => {
       elevation={5}
       sx={{
         p: 2,
-        ml: 5,
+        ml: '46px',
         height: '310px',
-        width: '925px',
+        width: '920px',
       }}
     >
       <Bar options={options} data={data} />

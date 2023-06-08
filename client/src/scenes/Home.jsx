@@ -4,15 +4,12 @@ import Search from '../components/search';
 import SimpleAccordion from '../components/owned';
 import Stories from '../components/stories';
 import OwnedBarChart from '../components/ownedBarChart';
+import StockValue from '../components/stockValue';
 
 export default function Home() {
-  const user = useSelector((state) => state.auth.user);
   const groups = useSelector((state) => state.auth.groups);
   const owned = useSelector((state) => state.auth.owned);
-  const currentStk = useSelector((state) => state.auth.currentStocks);
-  const currentStockInfo = useSelector((state) => state.auth.currentStockInfo);
-  const stkString = useSelector((state) => state.auth.stockString);
-  //console.log('home groups ', owned);
+
   return (
     <Box display={'flex'} justifyContent={'space-between'}>
       <Box display={'flex'} flexDirection={'column'} m={3}>
@@ -23,6 +20,7 @@ export default function Home() {
         <Stories />
       </Box>
       <Box display={'flex'} flexDirection={'column'} m={3}>
+        <StockValue />
         <SimpleAccordion title={'Stocks'} data={owned} type={0} />
         {groups.map((group, key) => (
           <SimpleAccordion key={key} title={`GROUP ${key + 1}`} data={group} type={1} />

@@ -6,9 +6,9 @@ const initialState = {
   groups: [],
   owned: [],
   currentStocks: [],
-  currentStockInfo: null,
+  currentStockInfo: [],
   stockString: '',
-  stories: null,
+  stories: [],
 };
 
 export const authSlice = createSlice({

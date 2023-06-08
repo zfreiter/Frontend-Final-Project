@@ -6,18 +6,21 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Divider from '@mui/material/Divider';
-import { Box } from '@mui/material';
+import Modal from '@mui/material/Modal';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import { getCurrentValue } from './utilityService';
+import { groupStocks, createStockStr } from './utilityService';
+import { Box, Link, Button, TextField } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  setCurrentStockInfo,
-  setCurrentStocks,
-  setStockString,
-  setOwned,
-  setUser,
-  setGroups,
-} from '../redux/authSlice';
+import { useNavigate } from 'react-router-dom';
+import { setCurrentStocks, setStockString, setOwned, setUser, setGroups } from '../redux/authSlice';
 
 const OwnedStocks = ({ title, data, type }) => {
+  const [openOwned, setOpenOwned] = useState(false);
+  const [amount, setAmount] = useState(0);
+  const [stockToChange, setStockToChange] = useState('');
+  const [stockKey, setStockKey] = useState(-1);
   const currentStockInfo = useSelector((state) => state.auth.currentStockInfo);
   const user = useSelector((state) => state.auth.user);
   const groups = useSelector((state) => state.auth.groups);
@@ -26,15 +29,9 @@ const OwnedStocks = ({ title, data, type }) => {
   const stkString = useSelector((state) => state.auth.stockString);
   const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  let stocks = [];
-  if (currentStockInfo) {
-    stocks = currentStockInfo.filter((stock) => {
-      return data.find((stocktwo) => {
-        return stock.symbol === stocktwo.name;
-      });
-    });
-  }
+  const stocks = getCurrentValue(currentStockInfo, data);
 
   const deleteOwned = async (stockToRemove) => {
     // Filter new owned list
@@ -56,28 +53,13 @@ const OwnedStocks = ({ title, data, type }) => {
       const resultInfo = await responseInfo.json();
 
       // Update string that contains a list of each stock used on the front page
-      const getStocks = [];
-      resultInfo.stocksOwned.map((stock) => {
-        getStocks.push(stock.name);
-      });
-
-      resultInfo.stockGroups.map((group) => {
-        group.map((stock) => {
-          getStocks.push(stock.name);
-        });
-      });
+      const getStocks = groupStocks(resultInfo.stocksOwned, resultInfo.stockGroups);
 
       const currStock = [...new Set([...getStocks])];
-
       dispatch(setCurrentStocks({ currentStocks: [...currStock] }));
 
-      let stocksStr = '';
-      currentStocks.map((stock) => {
-        stocksStr += stock + ',';
-      });
-
       // do not need to remove stock info. It can stay.
-      const editedStocksStr = stocksStr.slice(0, -1);
+      const editedStocksStr = createStockStr(currentStocks);
       dispatch(setStockString({ stockString: editedStocksStr }));
       dispatch(setOwned({ owned: resultInfo.stocksOwned }));
       dispatch(setGroups({ groups: resultInfo.stockGroups }));
@@ -113,28 +95,13 @@ const OwnedStocks = ({ title, data, type }) => {
       const resultInfo = await response.json();
 
       // Update string that contains a list of each stock used on the front page
-      const getStocks = [];
-      resultInfo.stocksOwned.map((stock) => {
-        getStocks.push(stock.name);
-      });
-
-      resultInfo.stockGroups.map((group) => {
-        group.map((stock) => {
-          getStocks.push(stock.name);
-        });
-      });
+      const getStocks = groupStocks(resultInfo.stocksOwned, resultInfo.stockGroups);
 
       const currStock = [...new Set([...getStocks])];
-
       dispatch(setCurrentStocks({ currentStocks: [...currStock] }));
 
-      let stocksStr = '';
-      currentStocks.map((stock) => {
-        stocksStr += stock + ',';
-      });
-
       // do not need to remove stock info. It can stay.
-      const editedStocksStr = stocksStr.slice(0, -1);
+      const editedStocksStr = createStockStr(currentStocks);
       dispatch(setStockString({ stockString: editedStocksStr }));
       dispatch(setOwned({ owned: resultInfo.stocksOwned }));
       dispatch(setGroups({ groups: resultInfo.stockGroups }));
@@ -152,8 +119,71 @@ const OwnedStocks = ({ title, data, type }) => {
     }
   };
 
+  const handleNav = (symbol) => {
+    console.log('tes ', symbol);
+    navigate(`/Stock/${symbol}`);
+  };
+
+  /* Styles for MUI Modal */
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    borderRadius: 2,
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '1px solid #C4C4C4',
+
+    boxShadow: 24,
+    p: 4,
+  };
+
+  const openModal = (key, shortName, amount) => {
+    setStockKey(key);
+    setAmount(amount);
+    setStockToChange(shortName);
+    setOpenOwned(true);
+  };
+
+  const updateShares = async () => {
+    const updatedOwned = [];
+    owned.map((stock) => {
+      updatedOwned.push({ ...stock });
+    });
+    updatedOwned[stockKey].amount = amount;
+    const data = { userId: user._id, owned: updatedOwned };
+
+    const url = 'http://localhost:3001/own/owned';
+    const options = {
+      method: 'PATCH',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    };
+
+    try {
+      const response = await fetch(url, options);
+      const json = await response.json();
+
+      dispatch(setOwned({ owned: json.stocksOwned }));
+      dispatch(setUser({ user: json }));
+      setStockKey(-1);
+      setAmount(0);
+      setStockToChange('');
+      setOpenOwned(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const closeModal = () => {
+    setOpenOwned(false);
+  };
+
   return (
-    <Box sx={{ width: '400px', mb: 1, borderRadius: 1 }}>
+    <Box sx={{ width: '434px', mb: 1, borderRadius: 1 }}>
       <Accordion autoFocus elevation={5}>
         <AccordionSummary
           autoFocus
@@ -184,16 +214,24 @@ const OwnedStocks = ({ title, data, type }) => {
                 p={1}
                 sx={{
                   width: '100%',
-                  '&:hover': {
-                    borderRadius: 1,
-                    backgroundColor: '#e6e3e3',
-                  },
-                  '&:hover .MuiBox-root': {},
+                  // '&:hover': {
+                  //   borderRadius: 1,
+                  //   backgroundColor: '#e6e3e3',
+                  // },
+                  // '&:hover .MuiBox-root': {},
                 }}
               >
                 <Box>
-                  <Typography fontSize={'10px'} fontWeight={'bold'}>
-                    {stock.symbol}
+                  <Typography fontSize={'10px'}>
+                    <Link
+                      fontWeight={'600'}
+                      component='button'
+                      variant='body2'
+                      underline='hover'
+                      onClick={() => handleNav(stock.symbol)}
+                    >
+                      {stock.symbol}
+                    </Link>
                   </Typography>
                   <Typography fontSize={'10px'} fontWeight={'bold'}>
                     {stock.shortName}
@@ -201,12 +239,38 @@ const OwnedStocks = ({ title, data, type }) => {
                 </Box>
 
                 <Box ml={'auto'}>
-                  <Typography fontSize={'10px'} textAlign={'right'}>
-                    ${stock.regularMarketPrice}
-                  </Typography>
-                  {type === 0 && (
-                    <Typography fontSize={'10px'} textAlign={'right'} sx={{ whiteSpace: 'nowrap' }}>
-                      {data[key].amount} Shares
+                  <Box display={'flex'} justifyContent={'flex-end'}>
+                    {type === 0 && (
+                      <Typography
+                        fontSize={'10px'}
+                        sx={{
+                          whiteSpace: 'nowrap',
+                          color: '#000000',
+                          '&:hover': {
+                            color: '#1D76D2',
+                          },
+                        }}
+                        onClick={() => openModal(key, stock.shortName, data[key].amount)}
+                      >
+                        {data[key].amount} Shares
+                      </Typography>
+                    )}
+
+                    {type === 0 && <Divider orientation='vertical' flexItem sx={{ ml: 1 }} />}
+                    <Typography fontSize={'10px'} textAlign={'right'} ml={1}>
+                      ${stock.regularMarketPrice}
+                    </Typography>
+                  </Box>
+
+                  {stock.regularMarketChangePercent > 0 ? (
+                    <Typography textAlign={'right'} fontSize={'10px'} color={'green'}>
+                      {stock.regularMarketChange.toFixed(2)}(
+                      {stock.regularMarketChangePercent.toFixed(2)})%
+                    </Typography>
+                  ) : (
+                    <Typography textAlign={'right'} fontSize={'10px'} color={'#AB0227'}>
+                      {stock.regularMarketChange.toFixed(2)}(
+                      {stock.regularMarketChangePercent.toFixed(2)})%
                     </Typography>
                   )}
                 </Box>
@@ -225,6 +289,52 @@ const OwnedStocks = ({ title, data, type }) => {
           ))}
         </AccordionDetails>
       </Accordion>
+      <Modal
+        open={openOwned}
+        onClose={closeModal}
+        sx={{
+          '& .MuiBackdrop-root': {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            opacity: 0.4,
+            zIndex: -1,
+          },
+        }}
+        aria-labelledby='modal-update-title'
+        aria-describedby='modal-update-description'
+      >
+        <Box sx={style}>
+          <Typography id='modal-update-title' variant='h6' component='h2' sx={{ mb: 1 }}>
+            Update {stockToChange} shares
+          </Typography>
+
+          <Button
+            id='modal-update-button'
+            variant='contained'
+            sx={{
+              mr: 1,
+              '&:hover': {
+                fontWeight: 600,
+                backgroundColor: '#fff',
+                color: '#3c52b2',
+              },
+            }}
+            onClick={updateShares}
+          >
+            UPDATE
+          </Button>
+          <TextField
+            size='small'
+            type='number'
+            label='Stock amount'
+            required
+            width={'75px'}
+            value={amount}
+            onChange={(event) => {
+              setAmount(event.target.value);
+            }}
+          />
+        </Box>
+      </Modal>
     </Box>
   );
 };

@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import { useNavigate } from 'react-router-dom';
+import { createStockStr } from './utilityService';
 import Modal from '@mui/material/Modal';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Box, Button, TextField, Typography, Link } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
 import { combineData } from '../stock_information/combineData';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -20,7 +23,6 @@ import {
 } from '../redux/authSlice';
 
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import { setUser } from '../redux/authSlice';
 
@@ -40,6 +42,7 @@ const Search = () => {
   const currentPrice = useSelector((state) => state.auth.currentStockInfo);
   const stockString = useSelector((state) => state.auth.stockString);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const closeOwnedModal = () => {
     setAmount(1);
@@ -74,13 +77,9 @@ const Search = () => {
       const json = await response.json();
 
       const stockList = [...new Set([...currentStk, found.stock.label])];
-      console.log('currentstk ', currentStk);
+
       // Update string that contains a list of each stock used on the front page
-      let stocksStr = '';
-      stockList.map((stock) => {
-        stocksStr += stock + ',';
-      });
-      const editedStocksStr = stocksStr.slice(0, -1);
+      let editedStocksStr = createStockStr(stockList);
       dispatch(setStockString({ stockString: editedStocksStr }));
 
       const urlInfo = `http://localhost:3001/stock/information?parems=${editedStocksStr}`;
@@ -139,12 +138,7 @@ const Search = () => {
         dispatch(setGroups({ groups: json.stockGroups }));
         dispatch(setCurrentStocks({ currentStocks: stockList }));
 
-        // Update string that contains a list of each stock used on the front page
-        let stocksStr = '';
-        stockList.map((stock) => {
-          stocksStr += stock + ',';
-        });
-        const editedStocksStr = stocksStr.slice(0, -1);
+        const editedStocksStr = createStockStr(stockList);
         if (editedStocksStr !== stockString) {
           dispatch(setStockString({ stockString: editedStocksStr }));
 
@@ -233,6 +227,10 @@ const Search = () => {
     p: 4,
   };
 
+  const handleNav = (symbol) => {
+    navigate(`/Stock/${symbol}`);
+  };
+
   return (
     <Box display={'flex'} flexDirection={'column'} gap={1} mb={3} height={'310px'}>
       <Box display={'flex'} gap={'5px'}>
@@ -250,7 +248,6 @@ const Search = () => {
         >
           Search
         </Button>
-
         <Autocomplete
           filterOptions={filterOptions}
           size='small'
@@ -276,34 +273,41 @@ const Search = () => {
           renderInput={(params) => <TextField {...params} label='NASDAQ/NYSE Stock Symbol' />}
         />
       </Box>
-      {found && show && (
+      {found && show ? (
         <Card elevation={5} sx={{ width: 'fit-content' }}>
           <CardContent sx={{ p: 0, '&:last-child': { pb: 0 } }}>
             <Box
-              position={'relative'}
+              display={'flex'}
+              flexDirection={'column'}
               width={'397.75px'}
               height={'400px'}
               borderRadius={1}
-              mt={1}
               borderColor={'#C4C4C4'}
               p={2}
             >
-              <HighlightOffIcon
-                color='#555555'
-                sx={{
-                  position: 'absolute',
-                  top: '5px',
-                  right: '5px',
-                  '&:hover': {
-                    color: '#AB0227',
-                  },
-                }}
-                onClick={() => setShow((current) => !current)}
-              />
-              <Typography fontWeight={'600'} mt={3}>
-                {found.stock.name}
+              <Box display={'flex'} justifyContent={'space-between'}>
+                <Typography fontWeight={'600'}>{found.stock.name}</Typography>
+                <HighlightOffIcon
+                  color='#555555'
+                  sx={{
+                    '&:hover': {
+                      color: '#AB0227',
+                    },
+                  }}
+                  onClick={() => setShow((current) => !current)}
+                />
+              </Box>
+              <Typography mb={7}>
+                <Link
+                  fontWeight={'600'}
+                  component='button'
+                  variant='body2'
+                  underline='hover'
+                  onClick={() => handleNav(found.stock.label)}
+                >
+                  {found.stock.label}
+                </Link>
               </Typography>
-              <Typography>{found.stock.label}</Typography>
               <Typography>${found.price}</Typography>
               {found.changePercentage >= 0 ? (
                 <Typography color={'green'} fontWeight={700}>
@@ -316,11 +320,19 @@ const Search = () => {
               )}
               <Typography>volume {found.totalVol}</Typography>
               <Typography fontSize={'12px'}>{found.date}</Typography>
-              <Box display={'flex'} mt={2}>
+              <Box display={'flex'} mt={0}>
                 <Button
                   variant='contained'
                   disabled={own.some((stock) => stock.name === found.stock.label)}
-                  sx={{ mr: '10px', fontSize: '10px', width: '119.25px' }}
+                  sx={{
+                    mr: '10px',
+                    fontSize: '10px',
+                    width: '119.25px',
+                    '&:hover': {
+                      backgroundColor: '#fff',
+                      color: '#3c52b2',
+                    },
+                  }}
                   onClick={openOwnedModal}
                 >
                   {own.some((stock) => stock.name === found.stock.label) ? 'Owned' : 'Add to Owned'}
@@ -339,7 +351,14 @@ const Search = () => {
                     <Button
                       id='modal-owned-button'
                       variant='contained'
-                      sx={{ mr: 1 }}
+                      sx={{
+                        mr: 1,
+                        '&:hover': {
+                          fontWeight: 600,
+                          backgroundColor: '#fff',
+                          color: '#3c52b2',
+                        },
+                      }}
                       onClick={addToOwned}
                     >
                       ADD
@@ -359,7 +378,13 @@ const Search = () => {
                 </Modal>
                 <Button
                   variant='contained'
-                  sx={{ fontSize: '10px' }}
+                  sx={{
+                    fontSize: '10px',
+                    '&:hover': {
+                      backgroundColor: '#fff',
+                      color: '#3c52b2',
+                    },
+                  }}
                   onClick={() => setOpenGroup(true)}
                 >
                   Add to Groups
@@ -378,7 +403,13 @@ const Search = () => {
                       <Button
                         id='modal-group-button'
                         variant='contained'
-                        sx={{ mr: 1 }}
+                        sx={{
+                          mr: 1,
+                          '&:hover': {
+                            backgroundColor: '#fff',
+                            color: '#3c52b2',
+                          },
+                        }}
                         onClick={addToGroup}
                       >
                         ADD
@@ -407,6 +438,41 @@ const Search = () => {
                     </Box>
                   </Box>
                 </Modal>
+              </Box>
+            </Box>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card elevation={5} sx={{ width: 'fit-content' }}>
+          <CardContent sx={{ p: 0, '&:last-child': { pb: 0 } }}>
+            <Box
+              display={'flex'}
+              flexDirection={'column'}
+              gap={2}
+              width={'397.75px'}
+              height={'400px'}
+              borderRadius={1}
+              mt={1}
+              borderColor={'#C4C4C4'}
+              p={2}
+            >
+              <Box display={'flex'}>
+                <ArrowForwardIcon />
+                <Typography fontSize={14} fontWeight={600} lineHeight={1.9}>
+                  Search for stocks in the Nasdaq and Nyse.
+                </Typography>
+              </Box>
+              <Box display={'flex'}>
+                <ArrowForwardIcon />
+                <Typography fontSize={14} fontWeight={600} lineHeight={1.9}>
+                  Add to your owned stocks
+                </Typography>
+              </Box>
+              <Box display={'flex'}>
+                <ArrowForwardIcon />
+                <Typography fontSize={14} fontWeight={600} lineHeight={1.9}>
+                  Add to one of three watch groups
+                </Typography>
               </Box>
             </Box>
           </CardContent>
