@@ -1,4 +1,7 @@
+//react
 import React, { useState, useEffect } from 'react';
+//redux
+import { useSelector } from 'react-redux';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -21,7 +24,7 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
+export const chartOptions = {
   responsive: true,
   plugins: {
     legend: {
@@ -29,7 +32,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Daily High vs Lows',
+      text: 'Daily High vs Low Price (USD)',
     },
   },
 };
@@ -59,12 +62,21 @@ export const lineData = {
 
 export default function StockChart({name, symbol, range}) {
     const [apiResult, setAPIResult] = useState();
-    const chartApiURL = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=demo`;
+    const token = useSelector((state) => state.auth.token);
+    const serverUrl = `${window.location.href.split('5173')[0]}3001/alphaVantage/timeseries?ticker=${symbol}`;
+    const options = {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      };
 
-    options.plugins.title.text = `${symbol} Daily Highs vs Lows`;
+
+    chartOptions.plugins.title.text = `${symbol} Daily High vs Low Price (USD)`;
 
     useEffect(() => {
-      fetch(chartApiURL)
+      fetch(serverUrl, options)
       .then(response => {return response.json()})
       .then(data => {
         setAPIResult(data);
@@ -92,5 +104,5 @@ export default function StockChart({name, symbol, range}) {
       .catch(err => console.log('Error: ', err));
     },[]);
 
-    return (<>{apiResult ? <Line options={options} data={lineData} /> : <h4>Loading...</h4>}</>);
+    return (<>{apiResult ? <Line options={chartOptions} data={lineData} /> : <h4>Loading...</h4>}</>);
 }

@@ -7,6 +7,8 @@ import authRoutes from './routes/auth.js';
 import groupRoutes from './routes/groups.js';
 import ownedRoutes from './routes/owned.js';
 import stockRoutes from './routes/stocks.js';
+import alphaVantageRoutes from './routes/alphaVantage.js';
+
 dotenv.config();
 const app = express();
 app.use(bodyParser.json({ limit: '30mb', extended: true }));
@@ -18,6 +20,7 @@ app.use('/auth', authRoutes);
 app.use('/group', groupRoutes);
 app.use('/own', ownedRoutes);
 app.use('/stock', stockRoutes);
+app.use('/alphaVantage', alphaVantageRoutes);
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
