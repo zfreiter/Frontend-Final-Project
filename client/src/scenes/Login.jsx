@@ -88,7 +88,7 @@ export default function Login(props) {
       password: pass,
     };
     console.log(account);
-    const response = await fetch(`https://frontend-final-project-topaz.vercel.app/auth/register`, {
+    const response = await fetch(`http://localhost:3001/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(account),
@@ -144,7 +144,7 @@ export default function Login(props) {
           const editedStocksStr = createStockStr(currStock);
           dispatch(setStockString({ stockString: editedStocksStr }));
 
-          const url = `https:/frontend-final-project-topaz.vercel.app/stock/information?parems=${editedStocksStr}`;
+          const url = `http://localhost:3001/stock/information?parems=${editedStocksStr}`;
           const options = {
             method: 'GET',
             headers: {
@@ -165,7 +165,7 @@ export default function Login(props) {
             'Content-Type': 'application/json',
           },
         };
-        const urlStories = 'https:/frontend-final-project-topaz.vercel.app/stock/stories';
+        const urlStories = 'http://localhost:3001/stock/stories';
         const responseStories = await fetch(urlStories, options);
         const resultStories = await responseStories.json();
         dispatch(setStories({ stories: resultStories }));
