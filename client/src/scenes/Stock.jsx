@@ -96,7 +96,7 @@ export default function Stock() {
   const {id} = useParams();
 
   //NEW API CALL
-  let serverURL = `${window.location.href.split('5174')[0]}3001/alphaVantage/overview?ticker=${id}`;
+  let serverURL = `${window.location.href.split('5173')[0]}3001/alphaVantage/overview?ticker=${id}`;
 
   if (id === null) {
     return (
