@@ -21,9 +21,7 @@ app.use('/group', groupRoutes);
 app.use('/own', ownedRoutes);
 app.use('/stock', stockRoutes);
 app.use('/alphaVantage', alphaVantageRoutes);
-app.get('/test', (req, res) => {
-  res.send('hello');
-});
+
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
 mongoose.set('strictQuery', false);

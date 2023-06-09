@@ -65,6 +65,7 @@ const Search = () => {
     const data = { userId: user._id, owned: upDatedOwned };
 
     const url = 'https://frontend-final-project-topaz.vercel.app/own/owned';
+    //const url = 'https://localhost:3001/own/owned';
     const options = {
       method: 'PATCH',
       headers: {
@@ -84,6 +85,7 @@ const Search = () => {
       dispatch(setStockString({ stockString: editedStocksStr }));
 
       const urlInfo = `https://frontend-final-project-topaz.vercel.app/stock/information?parems=${editedStocksStr}`;
+      //const url = `https://localhost:3001/stock/information?parems=${editedStocksStr}`;
       const optionsInfo = {
         method: 'GET',
         headers: {
@@ -121,7 +123,7 @@ const Search = () => {
 
       const data = { userId: user._id, groups: upDatedGroups };
       const url = 'https://frontend-final-project-topaz.vercel.app/group/groups';
-
+      //const url = 'https://localhost:3001/group/groups';
       const options = {
         method: 'PATCH',
         headers: {
@@ -134,7 +136,7 @@ const Search = () => {
       try {
         const response = await fetch(url, options);
         const json = await response.json();
-
+        dispatch(setUser({ user: json }));
         const stockList = [...new Set([...currentStk, found.stock.label])];
         dispatch(setGroups({ groups: json.stockGroups }));
         dispatch(setCurrentStocks({ currentStocks: stockList }));
@@ -144,6 +146,7 @@ const Search = () => {
           dispatch(setStockString({ stockString: editedStocksStr }));
 
           const urlInfo = `https://frontend-final-project-topaz.vercel.app/stock/information?parems=${editedStocksStr}`;
+          //const url = `https://localhost:3001/stock/information?parems=${editedStocksStr}`;
           const optionsInfo = {
             method: 'GET',
             headers: {
@@ -155,9 +158,9 @@ const Search = () => {
           // Get the new stock info for the home page and update the state
           const responseInfo = await fetch(urlInfo, optionsInfo);
           const resultInfo = await responseInfo.json();
-
-          dispatch(setCurrentStockInfo({ currentStockInfo: resultInfo }));
-          dispatch(setUser({ user: json }));
+          if (resultInfo) {
+            dispatch(setCurrentStockInfo({ currentStockInfo: resultInfo }));
+          }
         }
         setSelectGroup('');
         setOpenGroup(false);
@@ -171,7 +174,7 @@ const Search = () => {
   const handleSearch = async () => {
     /* REALSTONK FOR ONE ITEM, BUT RETURNS THE WRONG INFOMATION AT TIMES */
     const url = `https://frontend-final-project-topaz.vercel.app/stock/price?find=${stockValue.label}`;
-
+    //const url = `https://localhost:3001/stock/price?find=${stockValue.label}`;
     const options = {
       method: 'GET',
       headers: {
@@ -199,7 +202,7 @@ const Search = () => {
         }
         setStockValue(combineData[0]);
         const url2 = 'https://frontend-final-project-topaz.vercel.app/stock/stories';
-
+        //const url2 = 'https://localhost:3001/stock/stories';
         const response2 = await fetch(url2, options);
         const js = await response2.json();
       } catch (error) {
@@ -215,6 +218,7 @@ const Search = () => {
   });
 
   /* Styles for MUI Modal */
+  /* Used from https://mui.com/material-ui/react-modal/ with little modifications */
   const style = {
     position: 'absolute',
     top: '50%',

@@ -43,7 +43,7 @@ const Stories = () => {
     picNine,
   ];
 
-  return (
+  return stories.length > 0 ? (
     <Box>
       <Box display={'flex'} width={'1365px'} borderRadius={1} mb={1} p={1} sx={{ boxShadow: 5 }}>
         <Typography variant='h5'>Todays top market stories</Typography>
@@ -71,13 +71,20 @@ const Stories = () => {
               </Typography>
             </CardContent>
             <CardActions sx={{ ml: 1, mb: 0, pl: 1, pt: 0 }}>
-              <Link href={story.newsUrl} underline='hover' target='_blank'>
+              <Link href={story?.newsUrl} underline='hover' target='_blank'>
                 Read more
               </Link>
             </CardActions>
           </Card>
         ))}
       </Box>
+    </Box>
+  ) : (
+    <Box>
+      <Box display={'flex'} width={'1365px'} borderRadius={1} mb={1} p={1} sx={{ boxShadow: 5 }}>
+        <Typography variant='h5'>Todays top market stories</Typography>
+      </Box>
+      <Typography>Loading... or API is down</Typography>
     </Box>
   );
 };

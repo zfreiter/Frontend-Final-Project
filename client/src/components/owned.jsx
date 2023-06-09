@@ -7,8 +7,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import Divider from '@mui/material/Divider';
 import Modal from '@mui/material/Modal';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import { getCurrentValue } from './utilityService';
 import { groupStocks, createStockStr } from './utilityService';
 import { Box, Link, Button, TextField } from '@mui/material';
@@ -26,19 +24,24 @@ const OwnedStocks = ({ title, data, type }) => {
   const groups = useSelector((state) => state.auth.groups);
   const owned = useSelector((state) => state.auth.owned);
   const currentStocks = useSelector((state) => state.auth.currentStocks);
-  const stkString = useSelector((state) => state.auth.stockString);
+
   const token = useSelector((state) => state.auth.token);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const stocks = getCurrentValue(currentStockInfo, data);
-
+  let stocks;
+  if (currentStockInfo.length > 0) {
+    stocks = getCurrentValue(currentStockInfo, data);
+  } else {
+    stocks = data;
+  }
+  console.log('data ', stocks);
   const deleteOwned = async (stockToRemove) => {
     // Filter new owned list
     const upDatedOwned = owned.filter((stock) => stock.name !== stockToRemove);
     const data = { userId: user._id, owned: upDatedOwned };
 
-    const url = 'http://localhost:3001/own/owned';
+    const url = 'https://frontend-final-project-topaz.vercel.app/own/owned';
     const options = {
       method: 'PATCH',
       headers: {
@@ -80,7 +83,7 @@ const OwnedStocks = ({ title, data, type }) => {
     upDatedGroups[spot - 1] = upDatedGroup;
 
     const data = { userId: user._id, groups: upDatedGroups };
-    const url = 'http://localhost:3001/group/groups';
+    const url = 'https://frontend-final-project-topaz.vercel.app/group/groups';
 
     const options = {
       method: 'PATCH',
@@ -121,11 +124,11 @@ const OwnedStocks = ({ title, data, type }) => {
   };
 
   const handleNav = (symbol) => {
-    console.log('tes ', symbol);
     navigate(`/Stock/${symbol}`);
   };
 
   /* Styles for MUI Modal */
+  /* Used from https://mui.com/material-ui/react-modal/ with little modifications */
   const style = {
     position: 'absolute',
     top: '50%',
@@ -135,7 +138,6 @@ const OwnedStocks = ({ title, data, type }) => {
     width: 400,
     bgcolor: 'background.paper',
     border: '1px solid #C4C4C4',
-
     boxShadow: 24,
     p: 4,
   };
@@ -147,6 +149,7 @@ const OwnedStocks = ({ title, data, type }) => {
     setOpenOwned(true);
   };
 
+  // Update shares for owned stocks
   const updateShares = async () => {
     const updatedOwned = [];
     owned.map((stock) => {
@@ -155,7 +158,7 @@ const OwnedStocks = ({ title, data, type }) => {
     updatedOwned[stockKey].amount = amount;
     const data = { userId: user._id, owned: updatedOwned };
 
-    const url = 'http://localhost:3001/own/owned';
+    const url = 'https://frontend-final-project-topaz.vercel.app/own/owned';
     const options = {
       method: 'PATCH',
       headers: {
@@ -228,11 +231,11 @@ const OwnedStocks = ({ title, data, type }) => {
                       underline='hover'
                       onClick={() => handleNav(stock.symbol)}
                     >
-                      {stock.symbol}
+                      {currentStockInfo.length > 0 ? stock.symbol : stock.name}
                     </Link>
                   </Typography>
                   <Typography fontSize={12} fontWeight={600} fontFamily={'Roboto'}>
-                    {stock.shortName}
+                    {stock?.shortName}
                   </Typography>
                 </Box>
 
@@ -267,11 +270,11 @@ const OwnedStocks = ({ title, data, type }) => {
                       ml={1}
                       mt={0.4}
                     >
-                      ${stock.regularMarketPrice}
+                      {currentStockInfo.length > 0 ? stock.regularMarketPrice : 0}
                     </Typography>
                   </Box>
 
-                  {stock.regularMarketChangePercent > 0 ? (
+                  {stock?.regularMarketChangePercent > 0 ? (
                     <Typography
                       textAlign={'right'}
                       fontSize={12}
@@ -279,8 +282,11 @@ const OwnedStocks = ({ title, data, type }) => {
                       fontFamily={'Roboto'}
                       color={'green'}
                     >
-                      {stock.regularMarketChange.toFixed(2)}(
-                      {stock.regularMarketChangePercent.toFixed(2)})%
+                      {currentStockInfo.length > 0 ? stock?.regularMarketChange?.toFixed(2) : 0}(
+                      {currentStockInfo.length > 0
+                        ? stock?.regularMarketChangePercent?.toFixed(2)
+                        : 0}
+                      )%
                     </Typography>
                   ) : (
                     <Typography
@@ -290,8 +296,11 @@ const OwnedStocks = ({ title, data, type }) => {
                       fontFamily={'Roboto'}
                       color={'#AB0227'}
                     >
-                      {stock.regularMarketChange.toFixed(2)}(
-                      {stock.regularMarketChangePercent.toFixed(2)})%
+                      {currentStockInfo.length > 0 ? stock?.regularMarketChange.toFixed(2) : 0}(
+                      {currentStockInfo.length > 0
+                        ? stock?.regularMarketChangePercent.toFixed(2)
+                        : 0}
+                      )%
                     </Typography>
                   )}
                 </Box>

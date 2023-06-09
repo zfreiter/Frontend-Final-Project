@@ -11,8 +11,8 @@ const StockValue = () => {
   let regularMarketPreviousClose = 0;
   let regularMarketPrice = 0;
   owned.map((stock, key) => {
-    regularMarketPreviousClose += stock.amount * stocks[key].regularMarketPreviousClose;
-    regularMarketPrice += stock.amount * stocks[key].regularMarketPrice;
+    regularMarketPreviousClose += stock.amount * stocks[key]?.regularMarketPreviousClose;
+    regularMarketPrice += stock.amount * stocks[key]?.regularMarketPrice;
   });
 
   const percentChange = (
@@ -21,7 +21,7 @@ const StockValue = () => {
   ).toFixed(2);
   const priceDifference = (regularMarketPrice - regularMarketPreviousClose).toFixed(2);
 
-  return (
+  return currentStockInfo.length > 0 ? (
     <Box
       display={'flex'}
       sx={{
@@ -53,6 +53,8 @@ const StockValue = () => {
         {priceDifference}({percentChange}%)
       </Typography>
     </Box>
+  ) : (
+    <Typography>Loading... or API is down</Typography>
   );
 };
 
