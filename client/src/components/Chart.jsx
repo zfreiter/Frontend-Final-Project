@@ -14,15 +14,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export const chartOptions = {
   responsive: true,
@@ -37,7 +29,7 @@ export const chartOptions = {
   },
 };
 
-const labels = ["test"];
+const labels = ['test'];
 const d1 = [20];
 const d2 = [5];
 
@@ -59,31 +51,32 @@ export const lineData = {
   ],
 };
 
+export default function StockChart({ name, symbol, range }) {
+  const [apiResult, setAPIResult] = useState();
+  const token = useSelector((state) => state.auth.token);
+  //const serverUrl = `${window.location.href.split('5173')[0]}3001/alphaVantage/timeseries?ticker=${symbol}`;
+  const serverUrl = `https://frontend-final-project-topaz.vercel.app/alphaVantage/timeseries?ticker=${symbol}`;
+  const options = {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  };
 
-export default function StockChart({name, symbol, range}) {
-    const [apiResult, setAPIResult] = useState();
-    const token = useSelector((state) => state.auth.token);
-    const serverUrl = `${window.location.href.split('5173')[0]}3001/alphaVantage/timeseries?ticker=${symbol}`;
-    const options = {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      };
+  chartOptions.plugins.title.text = `${symbol} Daily High vs Low Price (USD)`;
 
-
-    chartOptions.plugins.title.text = `${symbol} Daily High vs Low Price (USD)`;
-
-    useEffect(() => {
-      fetch(serverUrl, options)
-      .then(response => {return response.json()})
-      .then(data => {
+  useEffect(() => {
+    fetch(serverUrl, options)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
         setAPIResult(data);
         let labels = [];
         let highs = [];
         let lows = [];
-        for (const [key, value] of Object.entries(data["Time Series (Daily)"])) {
+        for (const [key, value] of Object.entries(data['Time Series (Daily)'])) {
           let highValue = value['2. high'];
           let lowValue = value['3. low'];
 
@@ -98,11 +91,10 @@ export default function StockChart({name, symbol, range}) {
 
         lineData.labels = labels.reverse();
         lineData.datasets[0].data = highs.reverse();
-        lineData.datasets[1].data = lows.reverse(); 
-
+        lineData.datasets[1].data = lows.reverse();
       })
-      .catch(err => console.log('Error: ', err));
-    },[]);
+      .catch((err) => console.log('Error: ', err));
+  }, []);
 
-    return (<>{apiResult ? <Line options={chartOptions} data={lineData} /> : <h4>Loading...</h4>}</>);
+  return <>{apiResult ? <Line options={chartOptions} data={lineData} /> : <h4>Loading...</h4>}</>;
 }

@@ -96,8 +96,8 @@ export default function Stock() {
   const { id } = useParams();
 
   //NEW API CALL
-  let serverURL = `${window.location.href.split('5173')[0]}3001/alphaVantage/overview?ticker=${id}`;
-
+  //let serverURL = `${window.location.href.split('5173')[0]}3001/alphaVantage/overview?ticker=${id}`;
+  let serverURL = `https://frontend-final-project-topaz.vercel.app/alphaVantage/overview?ticker=${id}`;
   if (id === null) {
     return (
       <Box sx={{ margin: '5%', textAlign: 'center' }}>
