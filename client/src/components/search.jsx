@@ -64,7 +64,7 @@ const Search = () => {
     upDatedOwned.push({ name: found.stock.label, amount: amount });
     const data = { userId: user._id, owned: upDatedOwned };
 
-    const url = 'http://localhost:3001/own/owned';
+    const url = 'https://frontend-final-project-topaz.vercel.app/own/owned';
     const options = {
       method: 'PATCH',
       headers: {
@@ -83,7 +83,7 @@ const Search = () => {
       let editedStocksStr = createStockStr(stockList);
       dispatch(setStockString({ stockString: editedStocksStr }));
 
-      const urlInfo = `http://localhost:3001/stock/information?parems=${editedStocksStr}`;
+      const urlInfo = `https://frontend-final-project-topaz.vercel.app/stock/information?parems=${editedStocksStr}`;
       const optionsInfo = {
         method: 'GET',
         headers: {
@@ -120,7 +120,7 @@ const Search = () => {
       upDatedGroups[selectGroup].push(stockToAdd);
 
       const data = { userId: user._id, groups: upDatedGroups };
-      const url = 'http://localhost:3001/group/groups';
+      const url = 'https://frontend-final-project-topaz.vercel.app/group/groups';
 
       const options = {
         method: 'PATCH',
@@ -143,7 +143,7 @@ const Search = () => {
         if (editedStocksStr !== stockString) {
           dispatch(setStockString({ stockString: editedStocksStr }));
 
-          const urlInfo = `http://localhost:3001/stock/information?parems=${editedStocksStr}`;
+          const urlInfo = `https://frontend-final-project-topaz.vercel.app/stock/information?parems=${editedStocksStr}`;
           const optionsInfo = {
             method: 'GET',
             headers: {
@@ -170,7 +170,7 @@ const Search = () => {
   /* Function searches for an individual Stock */
   const handleSearch = async () => {
     /* REALSTONK FOR ONE ITEM, BUT RETURNS THE WRONG INFOMATION AT TIMES */
-    const url = `http://localhost:3001/stock/price?find=${stockValue.label}`;
+    const url = `https://frontend-final-project-topaz.vercel.app/stock/price?find=${stockValue.label}`;
 
     const options = {
       method: 'GET',
@@ -198,7 +198,7 @@ const Search = () => {
           setShow((current) => !current);
         }
         setStockValue(combineData[0]);
-        const url2 = 'http://localhost:3001/stock/stories';
+        const url2 = 'https://frontend-final-project-topaz.vercel.app/stock/stories';
 
         const response2 = await fetch(url2, options);
         const js = await response2.json();
