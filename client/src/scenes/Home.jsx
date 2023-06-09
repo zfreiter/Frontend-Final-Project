@@ -10,7 +10,8 @@ import Navbar from './Navbar';
 export default function Home() {
   const groups = useSelector((state) => state.auth.groups);
   const owned = useSelector((state) => state.auth.owned);
-
+  const test = useSelector((state) => state.auth.currentStockInfo);
+  console.log('test ', test);
   return (
     <>
       <Navbar />
