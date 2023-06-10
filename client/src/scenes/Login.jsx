@@ -94,6 +94,11 @@ export default function Login(props) {
       body: JSON.stringify(account),
     });
 
+    // const response = await fetch(`http://localhost:3001/auth/register`, {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(account),
+    // });
     if (response.status === 201) {
       setIsLogin(true);
       //setIsLogin(true);
@@ -121,7 +126,12 @@ export default function Login(props) {
         body: JSON.stringify(credentials),
       });
 
-      console.log('response', response);
+      // const response = await fetch(`http://localhost:3001/auth/login`, {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(credentials),
+      // });
+
       if (!response.ok) {
         setErrorMessage('Email / Password Combination Not Found');
         return;
@@ -145,6 +155,7 @@ export default function Login(props) {
           dispatch(setStockString({ stockString: editedStocksStr }));
 
           const url = `https://frontend-final-project-topaz.vercel.app/stock/information?parems=${editedStocksStr}`;
+          //const url = `http://localhost:3001/stock/information?parems=${editedStocksStr}`;
           const options = {
             method: 'GET',
             headers: {
@@ -152,11 +163,12 @@ export default function Login(props) {
               'Content-Type': 'application/json',
             },
           };
+          if (currStock.length !== 0) {
+            const responseInfo = await fetch(url, options);
+            const result = await responseInfo.json();
 
-          const responseInfo = await fetch(url, options);
-          const result = await responseInfo.json();
-
-          dispatch(setCurrentStockInfo({ currentStockInfo: result }));
+            dispatch(setCurrentStockInfo({ currentStockInfo: result }));
+          }
         }
         const options = {
           method: 'GET',
@@ -166,9 +178,12 @@ export default function Login(props) {
           },
         };
         const urlStories = 'https://frontend-final-project-topaz.vercel.app/stock/stories';
+        //const urlStories = 'http://localhost:3001/stock/stories';
         const responseStories = await fetch(urlStories, options);
         const resultStories = await responseStories.json();
-        dispatch(setStories({ stories: resultStories }));
+        if (responseStories) {
+          dispatch(setStories({ stories: [...resultStories] }));
+        }
       }
       navigate('/home');
     } catch (err) {

@@ -10,7 +10,9 @@ export default function IncomeTable({ symbol }) {
   const [incomeData, setIncomeData] = useState();
   const token = useSelector((state) => state.auth.token);
 
-  //const serverURl = `${window.location.href.split('5173')[0]}3001/alphaVantage/incomestatement?ticker=${symbol}`
+  // const serverURl = `${
+  //   window.location.href.split('5173')[0]
+  // }3001/alphaVantage/incomestatement?ticker=${symbol}`;
   const serverURl = `https://frontend-final-project-topaz.vercel.app/alphaVantage/incomestatement?ticker=${symbol}`;
   const options = {
     method: 'GET',

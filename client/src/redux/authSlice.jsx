@@ -6,7 +6,7 @@ const initialState = {
   groups: [],
   owned: [],
   currentStocks: [],
-  currentStockInfo: [],
+  currentStockInfo: null,
   stockString: '',
   stories: [],
 };
