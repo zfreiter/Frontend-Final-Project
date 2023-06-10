@@ -19,13 +19,13 @@ const OwnedStocks = ({ title, data, type }) => {
   const [amount, setAmount] = useState(0);
   const [stockToChange, setStockToChange] = useState('');
   const [stockKey, setStockKey] = useState(-1);
-  const currentStockInfo = useSelector((state) => state.auth.currentStockInfo);
-  const user = useSelector((state) => state.auth.user);
-  const groups = useSelector((state) => state.auth.groups);
-  const owned = useSelector((state) => state.auth.owned);
-  const currentStocks = useSelector((state) => state.auth.currentStocks);
+  const currentStockInfo = useSelector((state) => state.currentStockInfo);
+  const user = useSelector((state) => state.user);
+  const groups = useSelector((state) => state.groups);
+  const owned = useSelector((state) => state.owned);
+  const currentStocks = useSelector((state) => state.currentStocks);
 
-  const token = useSelector((state) => state.auth.token);
+  const token = useSelector((state) => state.token);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

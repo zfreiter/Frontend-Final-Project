@@ -3,8 +3,8 @@ import { Box, Typography } from '@mui/material';
 import { getCurrentValue } from './utilityService';
 
 const StockValue = () => {
-  const owned = useSelector((state) => state.auth.owned);
-  const currentStockInfo = useSelector((state) => state.auth.currentStockInfo);
+  const owned = useSelector((state) => state.owned);
+  const currentStockInfo = useSelector((state) => state.currentStockInfo);
 
   const stocks = getCurrentValue(currentStockInfo, owned);
 

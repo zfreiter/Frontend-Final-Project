@@ -91,7 +91,7 @@ export default function Stock() {
   const [displayRangeDays, setDisplayRangeDays] = useState(15);
   const [value, setValue] = useState(0);
   const [timeSeries, setTimeSeries] = useState();
-  const token = useSelector((state) => state.auth.token);
+  const token = useSelector((state) => state.token);
 
   const { id } = useParams();
 

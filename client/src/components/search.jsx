@@ -35,13 +35,13 @@ const Search = () => {
   const [openGroup, setOpenGroup] = useState(false);
   const [selectGroup, setSelectGroup] = useState('');
   const [amount, setAmount] = useState(1);
-  const own = useSelector((state) => state.auth.user.stocksOwned);
-  const user = useSelector((state) => state.auth.user);
-  const token = useSelector((state) => state.auth.token);
-  const groups = useSelector((state) => state.auth.user.stockGroups);
-  const currentStk = useSelector((state) => state.auth.currentStocks);
-  const currentPrice = useSelector((state) => state.auth.currentStockInfo);
-  const stockString = useSelector((state) => state.auth.stockString);
+  const own = useSelector((state) => state.user.stocksOwned);
+  const user = useSelector((state) => state.user);
+  const token = useSelector((state) => state.token);
+  const groups = useSelector((state) => state.user.stockGroups);
+  const currentStk = useSelector((state) => state.currentStocks);
+  const currentPrice = useSelector((state) => state.currentStockInfo);
+  const stockString = useSelector((state) => state.stockString);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -175,7 +175,7 @@ const Search = () => {
     /* REALSTONK FOR ONE ITEM, BUT RETURNS THE WRONG INFOMATION AT TIMES */
     const url = `https://frontend-final-project-topaz.vercel.app/stock/price?find=${stockValue.label}`;
     //const url = `http://localhost:3001/stock/price?find=${stockValue.label}`;
-    console.log('test ', stockValue);
+
     const options = {
       method: 'GET',
       headers: {
@@ -238,7 +238,6 @@ const Search = () => {
       <Box display={'flex'} gap={'5px'}>
         <Button
           variant='contained'
-          autoFocus
           onClick={handleSearch}
           sx={{
             boxShadow: 5,

@@ -15,8 +15,8 @@ import { Bar } from 'react-chartjs-2';
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const OwnedBarChart = () => {
-  const currentStockInfo = useSelector((state) => state.auth.currentStockInfo);
-  const owned = useSelector((state) => state.auth.owned);
+  const currentStockInfo = useSelector((state) => state.currentStockInfo);
+  const owned = useSelector((state) => state.owned);
   let stocks = [];
   if (currentStockInfo) {
     stocks = currentStockInfo.filter((stock) => {
