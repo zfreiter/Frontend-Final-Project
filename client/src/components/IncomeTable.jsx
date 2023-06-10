@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 
 export default function IncomeTable({ symbol }) {
   const [incomeData, setIncomeData] = useState();
-  const token = useSelector((state) => state.auth.token);
+  const token = useSelector((state) => state.token);
 
   // const serverURl = `${
   //   window.location.href.split('5173')[0]

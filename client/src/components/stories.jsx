@@ -18,7 +18,7 @@ import picNine from '../images/pexels_pixabay_534219.jpg';
 import picTen from '../images/pexels_pixabay_534229.jpg';
 import picEleven from '../images/pexels_skitterphoto_9660.jpg';
 const Stories = () => {
-  const stories = useSelector((state) => state.auth.stories);
+  const stories = useSelector((state) => state.stories);
   const smallerSelection = stories.slice(0, 20);
   const pictures = [
     pic,

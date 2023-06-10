@@ -8,11 +8,10 @@ import StockValue from '../components/stockValue';
 import Navbar from './Navbar';
 
 export default function Home() {
-  const groups = useSelector((state) => state.auth.groups);
-  const owned = useSelector((state) => state.auth.owned);
-  const test = useSelector((state) => state.auth.currentStockInfo);
-  const test2 = useSelector((state) => state.auth.stories);
-  console.log('test ', groups);
+  const groups = useSelector((state) => state.groups);
+  const owned = useSelector((state) => state.owned);
+  const test = useSelector((state) => state.currentStockInfo);
+  const test2 = useSelector((state) => state.stories);
 
   return (
     <>

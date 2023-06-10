@@ -53,7 +53,7 @@ export const lineData = {
 
 export default function StockChart({ name, symbol, range }) {
   const [apiResult, setAPIResult] = useState();
-  const token = useSelector((state) => state.auth.token);
+  const token = useSelector((state) => state.token);
   // const serverUrl = `${
   //   window.location.href.split('5173')[0]
   // }3001/alphaVantage/timeseries?ticker=${symbol}`;
