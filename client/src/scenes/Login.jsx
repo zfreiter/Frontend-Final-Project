@@ -131,7 +131,7 @@ export default function Login(props) {
       //   headers: { 'Content-Type': 'application/json' },
       //   body: JSON.stringify(credentials),
       // });
-      console.log('response', response);
+
       if (!response.ok) {
         setErrorMessage('Email / Password Combination Not Found');
         return;
@@ -163,11 +163,12 @@ export default function Login(props) {
               'Content-Type': 'application/json',
             },
           };
+          if (currStock.length !== 0) {
+            const responseInfo = await fetch(url, options);
+            const result = await responseInfo.json();
 
-          const responseInfo = await fetch(url, options);
-          const result = await responseInfo.json();
-
-          dispatch(setCurrentStockInfo({ currentStockInfo: result }));
+            dispatch(setCurrentStockInfo({ currentStockInfo: result }));
+          }
         }
         const options = {
           method: 'GET',
@@ -181,7 +182,7 @@ export default function Login(props) {
         const responseStories = await fetch(urlStories, options);
         const resultStories = await responseStories.json();
         if (responseStories) {
-          dispatch(setStories({ stories: resultStories }));
+          dispatch(setStories({ stories: [...resultStories] }));
         }
       }
       navigate('/home');

@@ -65,7 +65,7 @@ const Search = () => {
     const data = { userId: user._id, owned: upDatedOwned };
 
     const url = 'https://frontend-final-project-topaz.vercel.app/own/owned';
-    //const url = 'https://localhost:3001/own/owned';
+    //const url = 'http://localhost:3001/own/owned';
     const options = {
       method: 'PATCH',
       headers: {
@@ -85,7 +85,7 @@ const Search = () => {
       dispatch(setStockString({ stockString: editedStocksStr }));
 
       const urlInfo = `https://frontend-final-project-topaz.vercel.app/stock/information?parems=${editedStocksStr}`;
-      //const url = `https://localhost:3001/stock/information?parems=${editedStocksStr}`;
+      //const urlInfo = `http://localhost:3001/stock/information?parems=${editedStocksStr}`;
       const optionsInfo = {
         method: 'GET',
         headers: {
@@ -123,7 +123,7 @@ const Search = () => {
 
       const data = { userId: user._id, groups: upDatedGroups };
       const url = 'https://frontend-final-project-topaz.vercel.app/group/groups';
-      //const url = 'https://localhost:3001/group/groups';
+      //const url = 'http://localhost:3001/group/groups';
       const options = {
         method: 'PATCH',
         headers: {
@@ -146,7 +146,7 @@ const Search = () => {
           dispatch(setStockString({ stockString: editedStocksStr }));
 
           const urlInfo = `https://frontend-final-project-topaz.vercel.app/stock/information?parems=${editedStocksStr}`;
-          //const url = `https://localhost:3001/stock/information?parems=${editedStocksStr}`;
+          //const urlInfo = `http://localhost:3001/stock/information?parems=${editedStocksStr}`;
           const optionsInfo = {
             method: 'GET',
             headers: {
@@ -174,7 +174,8 @@ const Search = () => {
   const handleSearch = async () => {
     /* REALSTONK FOR ONE ITEM, BUT RETURNS THE WRONG INFOMATION AT TIMES */
     const url = `https://frontend-final-project-topaz.vercel.app/stock/price?find=${stockValue.label}`;
-    //const url = `https://localhost:3001/stock/price?find=${stockValue.label}`;
+    //const url = `http://localhost:3001/stock/price?find=${stockValue.label}`;
+    console.log('test ', stockValue);
     const options = {
       method: 'GET',
       headers: {
@@ -201,10 +202,6 @@ const Search = () => {
           setShow((current) => !current);
         }
         setStockValue(combineData[0]);
-        const url2 = 'https://frontend-final-project-topaz.vercel.app/stock/stories';
-        //const url2 = 'https://localhost:3001/stock/stories';
-        const response2 = await fetch(url2, options);
-        const js = await response2.json();
       } catch (error) {
         console.error('Error: ', error);
       }

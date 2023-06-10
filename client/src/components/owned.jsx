@@ -42,6 +42,7 @@ const OwnedStocks = ({ title, data, type }) => {
     const data = { userId: user._id, owned: upDatedOwned };
 
     const url = 'https://frontend-final-project-topaz.vercel.app/own/owned';
+    //const url = 'http://localhost:3001/own/owned';
     const options = {
       method: 'PATCH',
       headers: {
@@ -84,7 +85,7 @@ const OwnedStocks = ({ title, data, type }) => {
 
     const data = { userId: user._id, groups: upDatedGroups };
     const url = 'https://frontend-final-project-topaz.vercel.app/group/groups';
-
+    //const url = 'http://localhost:3001/group/groups';
     const options = {
       method: 'PATCH',
       headers: {
@@ -159,6 +160,7 @@ const OwnedStocks = ({ title, data, type }) => {
     const data = { userId: user._id, owned: updatedOwned };
 
     const url = 'https://frontend-final-project-topaz.vercel.app/own/owned';
+    //const url = 'http://localhost:3001/own/owned';
     const options = {
       method: 'PATCH',
       headers: {
